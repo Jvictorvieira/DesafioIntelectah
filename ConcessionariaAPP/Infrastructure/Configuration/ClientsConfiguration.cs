@@ -18,8 +18,7 @@ public class ClientsConfiguration : IEntityTypeConfiguration<Clients>
 
         builder.HasMany(c => c.Sales)
             .WithOne(s => s.Client)
-            .HasForeignKey(s => s.ClientId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.ClientId);
         builder.HasIndex(c => c.Cpf)
             .IsUnique()
             .HasDatabaseName("IX_Clients_CPF");

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ConcessionariaAPP.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial_migration : Migration
+    public partial class Initial_migration_load_models : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -160,25 +160,25 @@ namespace ConcessionariaAPP.Migrations
                         column: x => x.CarDealershipId,
                         principalTable: "CarDealerships",
                         principalColumn: "CarDealershipId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sales_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sales_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sales_Vehicles_VehicleId",
                         column: x => x.VehicleId,
                         principalTable: "Vehicles",
                         principalColumn: "VehicleId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

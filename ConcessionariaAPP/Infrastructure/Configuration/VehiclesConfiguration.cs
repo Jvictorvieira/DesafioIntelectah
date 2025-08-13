@@ -22,8 +22,7 @@ public class VehiclesConfiguration : IEntityTypeConfiguration<Vehicles>
             .IsRequired();
         builder.HasMany(v => v.Sales)
             .WithOne(s => s.Vehicle)
-            .HasForeignKey(s => s.VehicleId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.VehicleId);
         builder.HasMany(v => v.Manufacturers)
             .WithMany(m => m.Vehicles);
         builder.HasIndex(v => v.Model)

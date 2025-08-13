@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConcessionariaAPP.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250813034654_Initial_migration")]
-    partial class Initial_migration
+    [Migration("20250813171034_Initial_migration_load_models")]
+    partial class Initial_migration_load_models
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -332,25 +332,25 @@ namespace ConcessionariaAPP.Migrations
                     b.HasOne("ConcessionariaAPP.Domain.Entities.CarDealership", "CarDealership")
                         .WithMany("Sales")
                         .HasForeignKey("CarDealershipId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConcessionariaAPP.Domain.Entities.Clients", "Client")
                         .WithMany("Sales")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConcessionariaAPP.Domain.Entities.Users", "User")
                         .WithMany("Sales")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConcessionariaAPP.Domain.Entities.Vehicles", "Vehicle")
                         .WithMany("Sales")
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CarDealership");

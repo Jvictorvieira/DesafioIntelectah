@@ -19,8 +19,7 @@ public class UsersConfiguration : IEntityTypeConfiguration<Users>
 
         builder.HasMany(u => u.Sales)
             .WithOne(s => s.User)
-            .HasForeignKey(s => s.UserId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.UserId);
         builder.HasIndex(u => u.Name)
             .IsUnique()
             .HasDatabaseName("IX_Users_Name");

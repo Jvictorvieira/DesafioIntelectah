@@ -329,25 +329,25 @@ namespace ConcessionariaAPP.Migrations
                     b.HasOne("ConcessionariaAPP.Domain.Entities.CarDealership", "CarDealership")
                         .WithMany("Sales")
                         .HasForeignKey("CarDealershipId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConcessionariaAPP.Domain.Entities.Clients", "Client")
                         .WithMany("Sales")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConcessionariaAPP.Domain.Entities.Users", "User")
                         .WithMany("Sales")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ConcessionariaAPP.Domain.Entities.Vehicles", "Vehicle")
                         .WithMany("Sales")
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("CarDealership");

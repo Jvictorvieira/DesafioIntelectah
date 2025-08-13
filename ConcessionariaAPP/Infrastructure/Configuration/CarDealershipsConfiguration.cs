@@ -31,8 +31,7 @@ public class CarDealershipsConfiguration : IEntityTypeConfiguration<CarDealershi
             .IsRequired();
         builder.HasMany(cd => cd.Sales)
             .WithOne(s => s.CarDealership)
-            .HasForeignKey(s => s.CarDealershipId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.CarDealershipId);
         builder.HasIndex(cd => cd.Name)
             .IsUnique()
             .HasDatabaseName("IX_CarDealerships_Name");

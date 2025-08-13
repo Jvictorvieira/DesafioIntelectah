@@ -17,19 +17,15 @@ public class SalesConfiguration : IEntityTypeConfiguration<Sales>
             .HasMaxLength(20);
         builder.HasOne(s => s.Vehicle)
             .WithMany(v => v.Sales)
-            .HasForeignKey(s => s.VehicleId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.VehicleId);
         builder.HasOne(s => s.Client)
             .WithMany(c => c.Sales)
-            .HasForeignKey(s => s.ClientId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.ClientId);
         builder.HasOne(s => s.CarDealership)
             .WithMany(cd => cd.Sales)
-            .HasForeignKey(s => s.CarDealershipId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.CarDealershipId);
         builder.HasOne(s => s.User)
             .WithMany(u => u.Sales)
-            .HasForeignKey(s => s.UserId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .HasForeignKey(s => s.UserId);
     }
 }
