@@ -1,0 +1,21 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace ConcessionariaAPP.Domain.Enum;
+
+public enum VehiclesTypes
+{
+    [DisplayAttribute(Name = "Carro")]
+    Car,
+    [DisplayAttribute(Name = "Moto")]
+    Motorcycle,
+    [DisplayAttribute(Name = "Caminhão")]
+    Caminhao,
+    [DisplayAttribute(Name = "Ônibus")]
+    bus,
+    [DisplayAttribute(Name = "Avião")]
+    Airplane,
+    [DisplayAttribute(Name = "Navio")]
+    Ship,
+    [DisplayAttribute(Name = "Bicicleta")]
+    Bicycle,
+}
