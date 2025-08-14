@@ -6,8 +6,9 @@ using ConcessionariaAPP.Application.Interfaces;
 
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 
 namespace ConcessionariaAPP.Infrastructure;
@@ -21,7 +22,14 @@ public static class AppInjectionConfiguration
         services.ConfigureRepositories();
         services.ConfigureServices();
         services.AddControllers();
-        services.AddControllersWithViews();
+        services.AddControllersWithViews(options =>
+        {
+            var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            options.Filters.Add(new AuthorizeFilter(policy));
+        });
+
         services.ConfigureSwagger();
     }
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -64,6 +72,15 @@ public static class AppInjectionConfiguration
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders()
             .AddApiEndpoints();
+
+        services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = "/Account/Login";
+            options.LogoutPath = "/Account/Logout";
+            options.AccessDeniedPath = "/Account/AccessDenied";
+            options.Cookie.HttpOnly = true;
+            options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        });
 
         //services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
     }
