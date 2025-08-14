@@ -25,11 +25,6 @@ public class Sales : BaseEntity
     public CarDealership CarDealership { get; set; } = null!;
 
 
-    [ForeignKey("Users")]
-    public int UserId { get; set; }
-
-    public Users User { get; set; } = null!;
-
     [Column(TypeName = "decimal(10,2)")]
     [Display(Name = "Preço de Venda")]
     public decimal SalePrice { get; set; }
@@ -42,13 +37,13 @@ public class Sales : BaseEntity
     [MaxLength(20)]
     public string SaleProtocol { get; set; }
 
-    public Sales(int saleId, int vehicleId, int clientId, int carDealershipId, int userId, decimal salePrice, DateTime saleDate, string saleProtocol)
+    public Sales(int saleId, int vehicleId, int clientId, int carDealershipId, decimal salePrice, DateTime saleDate, string saleProtocol)
     {
         SaleId = saleId;
         VehicleId = vehicleId;
         ClientId = clientId;
         CarDealershipId = carDealershipId;
-        UserId = userId;
+
         SalePrice = salePrice;
         SaleDate = saleDate;
         SaleProtocol = saleProtocol;
