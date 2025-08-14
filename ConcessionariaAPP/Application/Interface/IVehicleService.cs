@@ -5,5 +5,5 @@ using System.Threading.Tasks;
 
 public interface IVehicleService : IGenericCrudInterface<Vehicles>
 {
-    Task LogicalDeleteAsync(int id);
+    
 }

@@ -1,8 +1,14 @@
+using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Domain.Repository;
+using ConcessionariaAPP.Application.Services;
+using ConcessionariaAPP.Application.Interfaces;
+
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace ConcessionariaAPP.Infrastructure;
 
@@ -10,6 +16,7 @@ public static class AppInjectionConfiguration
 {
     public static void Configure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.ConfigureAuthentication();
         services.ConfigureDbContext(configuration);
         services.ConfigureRepositories();
         services.ConfigureServices();
@@ -28,7 +35,7 @@ public static class AppInjectionConfiguration
     }
     public static void ConfigureServices(this IServiceCollection services)
     {
-
+        services.AddScoped<IVehicleService, VehicleAppService>();
     }
 
     public static void ConfigureSwagger(this IServiceCollection services)
@@ -39,6 +46,26 @@ public static class AppInjectionConfiguration
             var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         });
+    }
+
+    public static void ConfigureAuthentication(this IServiceCollection services)
+    {
+        services.AddAuthorization();
+
+        services.AddIdentity<Users, IdentityRole>(options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedEmail = false;
+            options.SignIn.RequireConfirmedPhoneNumber = false;
+            options.Password.RequireDigit = true;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireLowercase = true;
+        })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders()
+            .AddApiEndpoints();
+
+        //services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
     }
     
 
