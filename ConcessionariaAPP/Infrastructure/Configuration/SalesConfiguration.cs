@@ -24,8 +24,5 @@ public class SalesConfiguration : IEntityTypeConfiguration<Sales>
         builder.HasOne(s => s.CarDealership)
             .WithMany(cd => cd.Sales)
             .HasForeignKey(s => s.CarDealershipId);
-        builder.HasOne(s => s.User)
-            .WithMany(u => u.Sales)
-            .HasForeignKey(s => s.UserId);
     }
 }
