@@ -2,11 +2,18 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using ConcessionariaAPP.Infrastructure; // seu AppDbContext
 
+using ConcessionariaAPP.Application.Services;
+using ConcessionariaAPP.Application.Interfaces;
+using ConcessionariaAPP.Domain.Interfaces;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IVehicleRepository>(); // Registre seu repositório aqui
+builder.Services.AddScoped<IVehicleService, VehicleAppService>(); // Registre seu serviço aqui
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
