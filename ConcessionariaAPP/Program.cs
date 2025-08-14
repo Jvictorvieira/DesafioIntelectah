@@ -1,12 +1,5 @@
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 using ConcessionariaAPP.Infrastructure; // seu AppDbContext
-
-using ConcessionariaAPP.Application.Services;
-using ConcessionariaAPP.Application.Interfaces;
-using ConcessionariaAPP.Domain.Interfaces;
-
-
+using ConcessionariaAPP.Domain.Entities;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -36,6 +29,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -45,5 +39,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
+app.MapIdentityApi<Users>(); // Map Identity API endpoints for Users
 app.Run();
