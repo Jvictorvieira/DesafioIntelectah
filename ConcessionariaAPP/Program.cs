@@ -9,21 +9,9 @@ using ConcessionariaAPP.Domain.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IVehicleRepository>(); // Registre seu repositório aqui
-builder.Services.AddScoped<IVehicleService, VehicleAppService>(); // Registre seu serviço aqui
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+// Dependency Injection
+AppInjectionConfiguration.Configure(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
