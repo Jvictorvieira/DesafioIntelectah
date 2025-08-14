@@ -1,9 +1,10 @@
-namespace ConcessionariaAPP.Infrastructure;
-
+using ConcessionariaAPP.Domain.Interfaces;
+using ConcessionariaAPP.Domain.Repository;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
+namespace ConcessionariaAPP.Infrastructure;
 
 public static class AppInjectionConfiguration
 {
@@ -23,7 +24,7 @@ public static class AppInjectionConfiguration
     }
     public static void ConfigureRepositories(this IServiceCollection services)
     {
-
+        services.AddScoped<IVehicleRepository, VehiclesRepository>();
     }
     public static void ConfigureServices(this IServiceCollection services)
     {
