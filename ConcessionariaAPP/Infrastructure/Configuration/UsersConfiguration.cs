@@ -6,8 +6,7 @@ public class UsersConfiguration : IEntityTypeConfiguration<Users>
 {
     public void Configure(EntityTypeBuilder<Users> builder)
     {
-        builder.ToTable("Users");
-        builder.HasKey(u => u.UserId);
+        builder.ToTable("Users");   
         builder.Property(u => u.Name)
             .IsRequired()
             .HasMaxLength(50);
@@ -17,9 +16,6 @@ public class UsersConfiguration : IEntityTypeConfiguration<Users>
         builder.Property(u => u.AccessLevel)
             .IsRequired();
 
-        builder.HasMany(u => u.Sales)
-            .WithOne(s => s.User)
-            .HasForeignKey(s => s.UserId);
         builder.HasIndex(u => u.Name)
             .IsUnique()
             .HasDatabaseName("IX_Users_Name");

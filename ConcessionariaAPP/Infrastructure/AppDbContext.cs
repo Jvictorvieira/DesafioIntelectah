@@ -1,14 +1,14 @@
 using ConcessionariaAPP.Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace ConcessionariaAPP.Infrastructure;
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<Users>
 {
     public DbSet<Manufacturers> Manufacturers { get; set; }
     public DbSet<Vehicles> Vehicles { get; set; }
     public DbSet<Clients> Clients { get; set; }
     public DbSet<Sales> Sales { get; set; }
     public DbSet<CarDealership> CarDealerships { get; set; }
-    public DbSet<Users> Users { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

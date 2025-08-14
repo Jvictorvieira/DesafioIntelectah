@@ -71,24 +71,6 @@ namespace ConcessionariaAPP.Migrations
                     table.PrimaryKey("PK_Manufacturers", x => x.ManufacturerId);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    UserId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    AccessLevel = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
-                });
 
             migrationBuilder.CreateTable(
                 name: "Vehicles",
@@ -144,7 +126,6 @@ namespace ConcessionariaAPP.Migrations
                     VehicleId = table.Column<int>(type: "int", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false),
                     CarDealershipId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     SaleDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SaleProtocol = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
@@ -166,12 +147,6 @@ namespace ConcessionariaAPP.Migrations
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "ClientId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Sales_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Sales_Vehicles_VehicleId",
@@ -209,20 +184,9 @@ namespace ConcessionariaAPP.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sales_UserId",
-                table: "Sales",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Sales_VehicleId",
                 table: "Sales",
                 column: "VehicleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Name",
-                table: "Users",
-                column: "Name",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vehicles_Model",
@@ -247,9 +211,6 @@ namespace ConcessionariaAPP.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clients");
-
-            migrationBuilder.DropTable(
-                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
