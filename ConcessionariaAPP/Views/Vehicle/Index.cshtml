@@ -1,0 +1,38 @@
+
+@using ConcessionariaAPP.Application.DTO;
+@{
+    ViewData["Title"] = "Vehicle Page";
+    var vehicles = new List<VehicleDTO>()
+        {
+            new VehicleDTO { VehicleId = 1, Model = "Model S", VehicleType = ConcessionariaAPP.Domain.Enum.VehiclesTypes.Bicycle, ManufacturingYear = 2020, Price = 79999 },
+            new VehicleDTO { VehicleId = 2, Model = "Mustang", VehicleType = ConcessionariaAPP.Domain.Enum.VehiclesTypes.Bicycle, ManufacturingYear = 2021, Price = 55999 },
+            new VehicleDTO { VehicleId = 3, Model = "Civic", VehicleType = ConcessionariaAPP.Domain.Enum.VehiclesTypes.Bicycle, ManufacturingYear = 2019, Price = 24999 }
+        };
+    
+}
+
+<div class="text-center">
+    <h1 class="display-4">Essa é pagina de Veiculos</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Model</th>
+            <th>VehicleType</th>
+            <th>ManufacturingYear</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in vehicles)
+        {
+            <tr>
+                <td>@vehicle.VehicleId</td>
+                <td>@vehicle.Model</td>
+                <td>@vehicle.VehicleType</td>
+                <td>@vehicle.ManufacturingYear</td>
+                <td>@vehicle.Price.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</div>
