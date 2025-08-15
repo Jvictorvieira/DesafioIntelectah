@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Models.UserViewModel;
 using Microsoft.AspNetCore.Authorization;
+using ConcessionariaAPP.Infrastructure;
 
 namespace ConcessionariaAPP.Controllers;
 
@@ -17,16 +18,15 @@ public class AccountController : Controller
         _signInManager = signInManager;
     }
 
-
-    [AllowAnonymous]
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login()
     {
         return View();
     }
 
-    [AllowAnonymous]
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid)
@@ -78,13 +78,25 @@ public class AccountController : Controller
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
-            await _signInManager.SignInAsync(user, isPersistent: false);
-            return RedirectToAction("Index", "Home");
+            var roleResult = await _userManager.AddToRoleAsync(user, Roles.Seller); // Default role for new users
+            if (roleResult.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+            foreach (var error in roleResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
         }
-        foreach (var error in result.Errors)
+        else
         {
-            ModelState.AddModelError(string.Empty, error.Description);
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
         }
+
         return View(model);
     }
 
