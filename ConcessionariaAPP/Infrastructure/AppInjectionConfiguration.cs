@@ -3,6 +3,7 @@ using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Domain.Repository;
 using ConcessionariaAPP.Application.Services;
 using ConcessionariaAPP.Application.Interfaces;
+using ConcessionariaAPP.Infrastructure;
 
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
@@ -58,7 +59,20 @@ public static class AppInjectionConfiguration
 
     public static void ConfigureAuthentication(this IServiceCollection services)
     {
-        services.AddAuthorization();
+        services.AddAuthorization(options =>
+        {
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .RequireRole(Roles.Admin, Roles.Manager, Roles.Seller)
+                .Build();
+
+            options.AddPolicy("Admin", policy =>
+                policy.RequireRole(Roles.Admin));
+            options.AddPolicy("Manager", policy =>
+                policy.RequireRole(Roles.Manager));
+            options.AddPolicy("Seller", policy =>
+                policy.RequireRole(Roles.Seller));
+        });
 
         services.AddIdentity<Users, IdentityRole>(options =>
         {
