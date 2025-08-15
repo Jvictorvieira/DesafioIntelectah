@@ -1,0 +1,36 @@
+@using ConcessionariaAPP.Models.UserViewModel;
+@using ConcessionariaAPP.Domain.Enum
+@model LoggedUserViewModel
+
+@if (Model != null)
+{
+    // Botão para todos
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    // Botão para Admin e Gerente
+    @if (Model.AccessLevel == AccessLevel.Admin || Model.AccessLevel == AccessLevel.Manager)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Carro" asp-action="Index">Carros</a>
+        </li>
+        
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Relatorio" asp-action="Index">Relatórios</a>
+        </li>
+    }
+    @if (Model.AccessLevel == AccessLevel.Seller || Model.AccessLevel == AccessLevel.Admin)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Venda" asp-action="Index">Vendas</a>
+        </li>
+    }
+    // Botão só para Admin
+    @if (Model.AccessLevel == AccessLevel.Admin)
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Usuarios" asp-action="Index">Usuários</a>
+        </li>
+
+    }
+}
