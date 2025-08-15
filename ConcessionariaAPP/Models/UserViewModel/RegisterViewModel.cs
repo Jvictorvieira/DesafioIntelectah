@@ -20,5 +20,6 @@ public class RegisterViewModel
     [DataType(DataType.Password)]
     [Display(Name = "Confirme a Senha")]
     [Compare("Password", ErrorMessage = "A senha e a confirmação de senha não coincidem.")]
+    [Required(ErrorMessage = "O campo Corfieme a Senha é obrigatório.")]
     public string ConfirmPassword { get; set; } = string.Empty;
 }

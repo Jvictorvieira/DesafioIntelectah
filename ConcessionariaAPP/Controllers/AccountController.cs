@@ -54,4 +54,38 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
+    [AllowAnonymous]
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
+    [AllowAnonymous]
+    [HttpPost]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+        var user = new Users
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            Name = model.Name,
+        };
+        var result = await _userManager.CreateAsync(user, model.Password);
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            return RedirectToAction("Index", "Home");
+        }
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+        return View(model);
+    }
+
 }
