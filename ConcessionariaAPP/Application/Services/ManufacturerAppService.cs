@@ -86,7 +86,7 @@ public class ManufacturerAppService : IManufacturerService
         }
     }
     
-    private async Task<bool> ExistsByNameAsync(string name, int id = 0)
+    public async Task<bool> ExistsByNameAsync(string name, int id = 0)
         {
             try
             {

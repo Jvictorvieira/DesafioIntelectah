@@ -3,13 +3,23 @@
 @using ConcessionariaAPP.Application.Dto;
 
 @{
-    ViewData["Title"] = "Vehicle Page";
+    ViewData["Title"] = "Fabricantes";
 
     
 }
 
-<div class="text-center">
-    <h1 class="display-4">Essa é pagina de Fabricantes</h1>
+<div class="">
+    <div class="mb-3">
+        <div class="d-inline-block me-2">
+            <h2>@ViewData["Title"]</h2>
+            <br />
+            Total de fabricantes: @Model.Rows.Count
+        </div>
+        <div class="d-inline-block float-end">
+            <a asp-action="Create" class="btn btn-primary" onclick="openEntityModal('@Url.Action("Create", "Manufacturer")','Cadastro de Fabricante'); return false;">Adicionar Fabricante</a>
+        </div>
+    </div>
+
     @if (Model.Rows.Count == 0)
     {
         <p class="lead">Nenhum fabricante cadastrado.</p>
@@ -36,64 +46,89 @@
                         {
                             <td>@row.GetType().GetProperty(key)?.GetValue(row)</td>
                         }
-                        <td>Ações</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-warning btn-sm" onclick="openEntityModal(this.href, 'Edição de Fabricante'); return false;">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-danger btn-sm" onclick="openEntityModal(this.href, 'Exclusão de Fabricante'); return false;">Excluir</a>
+                        </td>
                     </tr>
 
                 }
             </tbody>
         </table>
     }
-    
-    @* <form asp-action="Create" method="post">
-        <div class="mb-3">
-            <label asp-for="Name" class="form-label"></label>
-            <input asp-for="Name" class="form-control" />
-            <span asp-validation-for="Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Country" class="form-label"></label>
-            <input asp-for="Country" class="form-control" />
-            <span asp-validation-for="Country" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="FundationYear" class="form-label"></label>
-            <input asp-for="FundationYear" class="form-control" />
-            <span asp-validation-for="FundationYear" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="WebSite" class="form-label"></label>
-            <input asp-for="WebSite" class="form-control" />
-            <span asp-validation-for="WebSite" class="text-danger"></span>
-        </div>
-        
-
-        <div class="float-end">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-        </div>
-
-    </form> *@
 </div>
-@if (ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
-{
+@section Scripts {
+    @if (ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
+    {
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                showErrorToast( '@string.Join("<br/>", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))');
+            });
+        </script>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                showSuccessToast('@TempData["SuccessMessage"]');
+            });
+        </script>
+    }
     <script>
-        window.addEventListener('DOMContentLoaded', function () {
-            var toastBody = document.getElementById('errorToastBody');
-            toastBody.innerHTML = '@string.Join("<br/>", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))';
-            var toastEl = document.getElementById('errorToast');
-            var toast = new bootstrap.Toast(toastEl);
-            toast.show();
-        });
-    </script>
-}
-@if (TempData["SuccessMessage"] != null)
-{
-    <script>
-        window.addEventListener('DOMContentLoaded', function () {
+        function showSuccessToast(message) {
             var toastBody = document.getElementById('successToastBody');
-            toastBody.textContent = '@TempData["SuccessMessage"]';
+            toastBody.textContent = message;
             var toastEl = document.getElementById('successToast');
             var toast = new bootstrap.Toast(toastEl);
             toast.show();
-        });
+        }
+
+        function showErrorToast(message) {
+            var toastBody = document.getElementById('errorToastBody');
+            toastBody.textContent = message;
+            var toastEl = document.getElementById('errorToast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+
+        function openEntityModal(url, title) {
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('entityModalBody').innerHTML = html;
+                    document.getElementById('entityModalLabel').textContent = title;
+                    var modal = new bootstrap.Modal(document.getElementById('entityModal'));
+                    modal.show();
+                });
+        }
+
+        document.addEventListener('submit', function(e) {
+            if (e.target && e.target.id === 'modalForm') {
+                e.preventDefault();
+
+                var form = e.target;
+                var url = form.action;
+                var formData = new FormData(form);
+
+                fetch(url, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(htmlOrJson => {
+                    try {
+                        var result = JSON.parse(htmlOrJson);
+                        if (result.success) {
+                            bootstrap.Modal.getInstance(document.getElementById('entityModal')).hide();
+                            showSuccessToast(result.message);
+                        }
+                    } catch {
+                        document.getElementById('entityModalBody').innerHTML = htmlOrJson;
+                    }
+                });
+            }
+        }, true);
     </script>
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

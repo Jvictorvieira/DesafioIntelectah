@@ -1,0 +1,33 @@
+@using ConcessionariaAPP.Models.ManufacturerViewModel
+@model ManufacturerViewModel
+
+@{
+    ViewData["Title"] = "Manufacturer Form";
+    var action = ViewData["Action"] as string ?? "Create";
+}
+
+
+<form id="modalForm" asp-action="@action" method="post">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Country" class="form-label"></label>
+        <input asp-for="Country" class="form-control" />
+        <span asp-validation-for="Country" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FundationYear" class="form-label"></label>
+        <input asp-for="FundationYear" class="form-control" />
+        <span asp-validation-for="FundationYear" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="WebSite" class="form-label"></label>
+        <input asp-for="WebSite" class="form-control" />
+        <span asp-validation-for="WebSite" class="text-danger"></span>
+    </div>
+</form> 

@@ -16,7 +16,7 @@ namespace ConcessionariaAPP.Models.ManufacturerViewModel
             ];
             Keys =
             [
-                "Id",
+                "ManufacturerId",
                 "Name",
                 "FundationYear",
                 "Country",

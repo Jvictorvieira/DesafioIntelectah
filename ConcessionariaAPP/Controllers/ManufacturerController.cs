@@ -8,6 +8,7 @@ using ConcessionariaAPP.Models.ManufacturerViewModel;
 using AutoMapper;
 using ConcessionariaAPP.Application.Dto;
 using System.Threading.Tasks;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ConcessionariaAPP.Controllers;
 
@@ -31,30 +32,51 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
     [HttpPost]
     public async Task<IActionResult> Create(ManufacturerViewModel model)
     {
-        
-        if (!ModelState.IsValid)
-            return View("Index",model);
-        if (model.FundationYear > DateTime.Now.Year)
+
+        if (!ModelState.IsValid || model.FundationYear > DateTime.Now.Year)
         {
-            ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
-            return View("Index",model);
+            if (model.FundationYear > DateTime.Now.Year)
+                ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
+            if (!string.IsNullOrEmpty(model.Name))
+            {
+                if (await _ManufacturerService.ExistsByNameAsync(model.Name.Trim()))
+                {
+                    ModelState.AddModelError(nameof(model.Name), "O nome do fabricante já está em uso.");
+                }
+            }
+            if (!ModelState.IsValid)
+                return PartialView("_Form", model);
         }
-        
+
         try
         {
             var dto = _mapper.Map<ManufacturerDto>(model);
             await _ManufacturerService.CreateAsync(dto);
-            TempData["SuccessMessage"] = "Cadastro realizado com sucesso!";
-            return RedirectToAction("Index");
+            return Json(new { success = true, message = "Cadastro realizado com sucesso!" });
         }
         catch (InvalidOperationException ex)
         {
-            var messages = ex.Message.Split(';');
-            foreach (var msg in messages)
-            {
+            foreach (var msg in ex.Message.Split(';'))
                 ModelState.AddModelError(string.Empty, msg.Trim());
-            }
-            return View("Index",model);
+            return PartialView("_Form", model);
         }
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return PartialView("_Form", new ManufacturerViewModel());
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var manufacturer = await _ManufacturerService.GetByIdAsync(id);
+        if (manufacturer == null)
+        {
+            return NotFound();
+        }
+        var model = _mapper.Map<ManufacturerViewModel>(manufacturer);
+        return PartialView("_Form", model);
     }
 }
