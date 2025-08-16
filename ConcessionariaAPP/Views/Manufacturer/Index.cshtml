@@ -1,0 +1,99 @@
+@using ConcessionariaAPP.Models.ManufacturerViewModel
+@model ManufacturerTableViewModel
+@using ConcessionariaAPP.Application.Dto;
+
+@{
+    ViewData["Title"] = "Vehicle Page";
+
+    
+}
+
+<div class="text-center">
+    <h1 class="display-4">Essa é pagina de Fabricantes</h1>
+    @if (Model.Rows.Count == 0)
+    {
+        <p class="lead">Nenhum fabricante cadastrado.</p>
+    }
+    else
+    {
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach (var column in Model.Columns)
+                    {
+                        <th>@column</th>
+                    }
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        @foreach (var key in Model.Keys)
+                        {
+                            <td>@row.GetType().GetProperty(key)?.GetValue(row)</td>
+                        }
+                        <td>Ações</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+    
+    @* <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Country" class="form-label"></label>
+            <input asp-for="Country" class="form-control" />
+            <span asp-validation-for="Country" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="FundationYear" class="form-label"></label>
+            <input asp-for="FundationYear" class="form-control" />
+            <span asp-validation-for="FundationYear" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="WebSite" class="form-label"></label>
+            <input asp-for="WebSite" class="form-control" />
+            <span asp-validation-for="WebSite" class="text-danger"></span>
+        </div>
+        
+
+        <div class="float-end">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+
+    </form> *@
+</div>
+@if (ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
+{
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var toastBody = document.getElementById('errorToastBody');
+            toastBody.innerHTML = '@string.Join("<br/>", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))';
+            var toastEl = document.getElementById('errorToast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        });
+    </script>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var toastBody = document.getElementById('successToastBody');
+            toastBody.textContent = '@TempData["SuccessMessage"]';
+            var toastEl = document.getElementById('successToast');
+            var toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        });
+    </script>
+}

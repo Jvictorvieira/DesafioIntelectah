@@ -8,13 +8,13 @@ using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Application.Dto;
 using AutoMapper;
 
-public class ManufactureAppService : IManufactureService
+public class ManufacturerAppService : IManufacturerService
 {
-    private readonly IManufactureRepository _manufactureRepository;
+    private readonly IManufacturerRepository _ManufacturerRepository;
     private readonly IMapper _mapper;
-    public ManufactureAppService(IManufactureRepository manufactureRepository, IMapper mapper)
+    public ManufacturerAppService(IManufacturerRepository ManufacturerRepository, IMapper mapper)
     {
-        _manufactureRepository = manufactureRepository;
+        _ManufacturerRepository = ManufacturerRepository;
         _mapper = mapper;
     }
 
@@ -30,7 +30,7 @@ public class ManufactureAppService : IManufactureService
             throw new InvalidOperationException("Modelo já cadastrado.");
         }
 
-        var created = await _manufactureRepository.CreateAsync(entity);
+        var created = await _ManufacturerRepository.CreateAsync(entity);
         return _mapper.Map<ManufacturerDto>(created);
     }
 
@@ -44,13 +44,13 @@ public class ManufactureAppService : IManufactureService
         }
 
         var entity = _mapper.Map<Manufacturers>(dto);
-        var updated = await _manufactureRepository.UpdateAsync(entity);
+        var updated = await _ManufacturerRepository.UpdateAsync(entity);
         return _mapper.Map<ManufacturerDto>(updated);
     }
 
     public async Task<ManufacturerDto> GetByIdAsync(int id)
     {
-        var entity = await _manufactureRepository.GetByIdAsync(id);
+        var entity = await _ManufacturerRepository.GetByIdAsync(id);
         return _mapper.Map<ManufacturerDto>(entity);
     }
 
@@ -60,12 +60,12 @@ public class ManufactureAppService : IManufactureService
         {
             throw new ArgumentException("Id inválido para exclusão.", nameof(id));
         }
-        return await _manufactureRepository.DeleteAsync(id);
+        return await _ManufacturerRepository.DeleteAsync(id);
     }
 
     public async Task<IEnumerable<ManufacturerDto>> GetAllAsync()
     {
-        var list = await _manufactureRepository.GetAllAsync();
+        var list = await _ManufacturerRepository.GetAllAsync();
         return [.. list.Select(e => _mapper.Map<ManufacturerDto>(e))];
     }
 
@@ -90,8 +90,8 @@ public class ManufactureAppService : IManufactureService
         {
             try
             {
-                var manufacturer = await _manufactureRepository.GetByNameAsync(name.Trim());
-                if (manufacturer != null && manufacturer.ManufacturerId == id)
+                var Manufacturer = await _ManufacturerRepository.GetByNameAsync(name.Trim());
+                if (Manufacturer != null && Manufacturer.ManufacturerId == id)
                 {
                     return false;       
                 }

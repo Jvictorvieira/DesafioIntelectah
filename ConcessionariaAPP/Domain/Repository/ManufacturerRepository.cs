@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConcessionariaAPP.Domain.Repository;
 
-public class ManufactureRepository(AppDbContext context) : IManufactureRepository
+public class ManufacturerRepository(AppDbContext context) : IManufacturerRepository
 {
     private readonly AppDbContext _context = context;
 
