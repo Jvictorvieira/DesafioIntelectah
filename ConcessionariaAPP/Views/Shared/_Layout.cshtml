@@ -54,28 +54,11 @@
             @RenderBody()
         </main>
     </div>
-    <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;">
-        <div class="toast" id="successToast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Sucesso</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body" id="successToastBody">
-                <!-- Mensagem de sucesso -->
-            </div>
-        </div>
-    </div>
-    <div aria-live="polite" aria-atomic="true" style="position: fixed; top: 1rem; right: 1rem; z-index: 9999;">
-        <div class="toast" id="errorToast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-danger text-white">
-                <strong class="me-auto">Erro</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-            <div class="toast-body" id="errorToastBody">
-                <!-- Mensagem de erro  -->
-            </div>
-        </div>
-    </div>
+    
+    @await Html.PartialAsync("_Modal")
+    @await Html.PartialAsync("_SuccessToast")
+    @await Html.PartialAsync("_DangerToast")
+    
 
     @if (User.Identity != null && User.Identity.IsAuthenticated)
     {
@@ -89,6 +72,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
