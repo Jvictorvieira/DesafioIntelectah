@@ -98,6 +98,10 @@ public static class AppInjectionConfiguration
 
         //services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
     }
+    public static void AutoMapperConfiguration(this IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(ApplicationMappingProfile));
+    }
     
 
 }
