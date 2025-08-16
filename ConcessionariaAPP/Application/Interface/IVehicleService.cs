@@ -1,9 +1,8 @@
 namespace ConcessionariaAPP.Application.Interfaces;
 
-using ConcessionariaAPP.Domain.Entities;
-using System.Threading.Tasks;
+using ConcessionariaAPP.Application.Dto;
 
-public interface IVehicleService : IGenericCrudInterface<Vehicles>
+public interface IVehicleService : IGenericCrudInterface<VehicleDto>
 {
     
 }
