@@ -3,7 +3,7 @@ using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Domain.Repository;
 using ConcessionariaAPP.Application.Services;
 using ConcessionariaAPP.Application.Interfaces;
-using ConcessionariaAPP.Infrastructure;
+using ConcessionariaAPP.Application.Mapping;
 
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +22,7 @@ public static class AppInjectionConfiguration
         services.ConfigureDbContext(configuration);
         services.ConfigureRepositories();
         services.ConfigureServices();
+        services.AutoMapperConfiguration();
         services.AddControllers();
         services.AddControllersWithViews(options =>
         {
@@ -41,10 +42,12 @@ public static class AppInjectionConfiguration
     public static void ConfigureRepositories(this IServiceCollection services)
     {
         services.AddScoped<IVehicleRepository, VehiclesRepository>();
+        services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
     }
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddScoped<IVehicleService, VehicleAppService>();
+        services.AddScoped<IManufacturerService, ManufacturerAppService>();
     }
 
     public static void ConfigureSwagger(this IServiceCollection services)
@@ -100,6 +103,7 @@ public static class AppInjectionConfiguration
     }
     public static void AutoMapperConfiguration(this IServiceCollection services)
     {
+
         services.AddAutoMapper(typeof(ApplicationMappingProfile));
     }
     
