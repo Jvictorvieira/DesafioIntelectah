@@ -55,7 +55,7 @@ public class VehiclesRepository(AppDbContext context) : IVehicleRepository
         var existingVehicle = await _context.Vehicles.FindAsync(entity.VehicleId)
             ?? throw new KeyNotFoundException("Veículo não encontrado.");
 
-        existingVehicle.Model = entity.Model; // mantém o que você já atualizava
+        existingVehicle.Model = entity.Model;
         await _context.SaveChangesAsync();
         return existingVehicle;
     }
