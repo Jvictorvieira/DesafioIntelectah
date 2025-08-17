@@ -48,7 +48,7 @@
                         }
                         <td>
                             <a asp-action="Edit" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-warning btn-sm" onclick="openEntityModal(this.href, 'Edição de Fabricante'); return false;">Editar</a>
-                            <a asp-action="Delete" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-danger btn-sm" onclick="openEntityModal(this.href, 'Exclusão de Fabricante'); return false;">Excluir</a>
+                            <a asp-action="Delete" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-danger btn-sm" onclick="openDeleteModal(this.href, 'Exclusão de Fabricante'); return false;">Excluir</a>
                         </td>
                     </tr>
 
@@ -74,61 +74,6 @@
             });
         </script>
     }
-    <script>
-        function showSuccessToast(message) {
-            var toastBody = document.getElementById('successToastBody');
-            toastBody.textContent = message;
-            var toastEl = document.getElementById('successToast');
-            var toast = new bootstrap.Toast(toastEl);
-            toast.show();
-        }
-
-        function showErrorToast(message) {
-            var toastBody = document.getElementById('errorToastBody');
-            toastBody.textContent = message;
-            var toastEl = document.getElementById('errorToast');
-            var toast = new bootstrap.Toast(toastEl);
-            toast.show();
-        }
-
-        function openEntityModal(url, title) {
-            fetch(url)
-                .then(response => response.text())
-                .then(html => {
-                    document.getElementById('entityModalBody').innerHTML = html;
-                    document.getElementById('entityModalLabel').textContent = title;
-                    var modal = new bootstrap.Modal(document.getElementById('entityModal'));
-                    modal.show();
-                });
-        }
-
-        document.addEventListener('submit', function(e) {
-            if (e.target && e.target.id === 'modalForm') {
-                e.preventDefault();
-
-                var form = e.target;
-                var url = form.action;
-                var formData = new FormData(form);
-
-                fetch(url, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(htmlOrJson => {
-                    try {
-                        var result = JSON.parse(htmlOrJson);
-                        if (result.success) {
-                            bootstrap.Modal.getInstance(document.getElementById('entityModal')).hide();
-                            showSuccessToast(result.message);
-                        }
-                    } catch {
-                        document.getElementById('entityModalBody').innerHTML = htmlOrJson;
-                    }
-                });
-            }
-        }, true);
-    </script>
     
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
