@@ -37,13 +37,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         {
             if (model.FundationYear > DateTime.Now.Year)
                 ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
-            if (!string.IsNullOrEmpty(model.Name))
-            {
-                if (await _ManufacturerService.ExistsByNameAsync(model.Name.Trim()))
-                {
-                    ModelState.AddModelError(nameof(model.Name), "O nome do fabricante já está em uso.");
-                }
-            }
+            
             if (!ModelState.IsValid)
                 return PartialView("_Form", model);
         }
@@ -76,7 +70,64 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         {
             return NotFound();
         }
+        ViewData["Action"] = "Edit";
         var model = _mapper.Map<ManufacturerViewModel>(manufacturer);
         return PartialView("_Form", model);
+    }
+    [HttpPost]
+    public async Task<IActionResult> Edit(ManufacturerViewModel model)
+    {
+        if (!ModelState.IsValid || model.FundationYear > DateTime.Now.Year)
+        {
+            if (model.FundationYear > DateTime.Now.Year)
+                ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
+            
+            if (!ModelState.IsValid)
+                ViewData["Action"] = "Edit";
+                return PartialView("_Form", model);
+        }
+
+        try
+        {
+            var dto = _mapper.Map<ManufacturerDto>(model);
+            await _ManufacturerService.UpdateAsync(dto);
+            return Json(new { success = true, message = "Cadastro atualizado com sucesso!" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            ViewData["Action"] = "Edit";
+            foreach (var msg in ex.Message.Split(';'))
+                ModelState.AddModelError(string.Empty, msg.Trim());
+            return PartialView("_Form", model);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var manufacturer = await _ManufacturerService.GetByIdAsync(id);
+        if (manufacturer == null)
+        {
+            return NotFound();
+        }
+
+        var model = _mapper.Map<ManufacturerViewModel>(manufacturer);
+        return PartialView("_FormDelete", model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        try
+        {
+            await _ManufacturerService.DeleteAsync(id);
+            return Json(new { success = true, message = "Cadastro excluído com sucesso!" });
+        }
+        catch (InvalidOperationException ex)
+        {
+            foreach (var msg in ex.Message.Split(';'))
+                ModelState.AddModelError(string.Empty, msg.Trim());
+            return PartialView("_FormDelete", new ManufacturerViewModel { ManufacturerId = id });
+        }
     }
 }

@@ -27,7 +27,7 @@ public class ManufacturerAppService : IManufacturerService
 
         if (await ExistsByNameAsync(dto.Name))
         { 
-            throw new InvalidOperationException("Modelo já cadastrado.");
+            throw new InvalidOperationException("O nome do fabricante já está em uso.");
         }
 
         var created = await _ManufacturerRepository.CreateAsync(entity);
@@ -40,7 +40,7 @@ public class ManufacturerAppService : IManufacturerService
 
         if (await ExistsByNameAsync(dto.Name, dto.ManufacturerId ?? 0))
         {
-            throw new InvalidOperationException("Modelo já cadastrado.");
+            throw new InvalidOperationException("O nome do fabricante já está em uso.");
         }
 
         var entity = _mapper.Map<Manufacturers>(dto);
