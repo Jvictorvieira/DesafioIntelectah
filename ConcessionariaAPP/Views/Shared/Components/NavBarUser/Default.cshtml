@@ -4,35 +4,39 @@
 
 @if (Model != null)
 {
-    // Botão para todos
+
     <li class="nav-item">
         <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
     </li>
-    // Botão para Admin e Gerente
-    @if (Model.AccessLevel == AccessLevel.Admin || Model.AccessLevel == AccessLevel.Manager)
+
+    @if (Model.AccessLevel == AccessLevel.Admin)
     {
+        
         <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Manufacturer" asp-action="Index">Fabricantes</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="CarDealership" asp-action="Index">Concessionárias</a>
+        </li>
+    }
+
+    @if (Model.AccessLevel == AccessLevel.Admin || Model.AccessLevel == AccessLevel.Manager)
+    {
+        
+        <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Vehicle" asp-action="Index">Veículos</a>
         </li>
-        <li class="nav-item">
+        @* <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="Report" asp-action="Index">Relatórios</a>
+        </li> *@
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Client" asp-action="Index">Clientes</a>
         </li>
     }
     @if (Model.AccessLevel == AccessLevel.Seller || Model.AccessLevel == AccessLevel.Admin)
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Venda" asp-action="Index">Vendas</a>
+            <a class="nav-link text-dark" asp-controller="Sale" asp-action="Index">Vendas</a>
         </li>
-    }
-    // Botão só para Admin
-    @if (Model.AccessLevel == AccessLevel.Admin)
-    {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Usuarios" asp-action="Index">Usuários</a>
-        </li>
-
     }
 }
