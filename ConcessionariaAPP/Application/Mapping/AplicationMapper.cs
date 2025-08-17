@@ -12,23 +12,27 @@ namespace ConcessionariaAPP.Application.Mapping
     {
         public ApplicationMappingProfile()
         {
-            // Entidade -> DTO de saída
             CreateMap<Vehicles, VehicleDto>()
-                .ForMember(opt => opt.ManufacturerName, ent => ent.Ignore());
+            .ForMember(dest => dest.ManufacturerIds, opt => opt.MapFrom(src => src.Manufacturers.Select(m => m.ManufacturerId).ToList()))
+            .ForMember(dest => dest.ManufacturerNames, opt => opt.MapFrom(src => src.Manufacturers.Select(m => m.Name).ToList()));
 
-            // DTO de criação -> Entidade
+            
             CreateMap<VehicleDto, Vehicles>()
-                .ForMember(opt => opt.VehicleId, ent => ent.Ignore())
-                .ForMember(opt => opt.Manufacturers, ent => ent.Ignore());
+                .ForMember(dest => dest.Manufacturers, opt => opt.Ignore()); // Relacione manualmente no serviço/repositório
 
-            CreateMap<VehicleDto, VehicleViewModel>().ReverseMap();
+
+            CreateMap<VehicleDto, VehicleViewModel>()
+                .ForMember(dest => dest.ManufacturerIds, opt => opt.MapFrom(src => src.ManufacturerIds))
+                .ForMember(dest => dest.ManufacturerNames, opt => opt.MapFrom(src => src.ManufacturerNames))
+                .ForMember(dest => dest.Manufacturer, opt => opt.MapFrom(src => src.ManufacturerNames != null && src.ManufacturerNames.Count > 0
+                    ? string.Join(", ", src.ManufacturerNames)
+                    : "Nenhum fabricante selecionado"))
+                .ReverseMap();
 
             CreateMap<Manufacturers, ManufacturerDto>().ReverseMap();
 
             CreateMap<ManufacturerDto, ManufacturerViewModel>().ReverseMap();
-            CreateMap<Manufacturers, ManufacturerDto>().ReverseMap();
 
-            CreateMap<ManufacturerDto, ManufacturerViewModel>().ReverseMap();
         }
     }
 }
