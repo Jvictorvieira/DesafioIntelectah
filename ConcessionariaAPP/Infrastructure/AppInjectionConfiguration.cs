@@ -43,11 +43,17 @@ public static class AppInjectionConfiguration
     {
         services.AddScoped<IVehicleRepository, VehiclesRepository>();
         services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+        services.AddScoped<ICarDealershipRepository, CarDealershipRepository>();
+        services.AddScoped<IClientRepository, ClientRepository>();
+        services.AddScoped<ISaleRepository, SaleRepository>();
     }
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddScoped<IVehicleService, VehicleAppService>();
         services.AddScoped<IManufacturerService, ManufacturerAppService>();
+        services.AddScoped<ICarDealershipService, CarDealershipAppService>();
+        services.AddScoped<IClientService, ClientAppService>();
+        services.AddScoped<ISaleService, SaleAppService>();
     }
 
     public static void ConfigureSwagger(this IServiceCollection services)
