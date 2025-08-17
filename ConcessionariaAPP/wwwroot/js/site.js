@@ -27,7 +27,6 @@ function openEntityModal(url, title) {
             var modal = new bootstrap.Modal(document.getElementById('entityModal'));
             modal.show();
 
-            
             var modalForm = document.getElementById('modalForm');
             if (modalForm) {
                 modalForm.onsubmit = function(e) {
@@ -46,6 +45,7 @@ function openEntityModal(url, title) {
                             if (result.success) {
                                 modal.hide();
                                 showSuccessToast(result.message);
+                                getTableData(result.url);
                             }
                         } catch {
                             document.getElementById('entityModalBody').innerHTML = htmlOrJson;
@@ -53,7 +53,7 @@ function openEntityModal(url, title) {
                     });
                 };
             }
-    });
+        });
 }
 
 function openDeleteModal(url, title) {
@@ -84,6 +84,7 @@ function openDeleteModal(url, title) {
                         if (result.success) {
                             modal.hide();
                             showSuccessToast(result.message);
+                            getTableData(result.url);
                         }
                     } catch {
                         document.getElementById('deleteModalBody').innerHTML = htmlOrJson;
@@ -94,3 +95,10 @@ function openDeleteModal(url, title) {
     });
 }
     
+function getTableData(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('data-table').innerHTML = html;
+        });
+}

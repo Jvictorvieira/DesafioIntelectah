@@ -1,6 +1,6 @@
 @using ConcessionariaAPP.Models.ManufacturerViewModel
 @model ManufacturerTableViewModel
-@using ConcessionariaAPP.Application.Dto;
+
 
 @{
     ViewData["Title"] = "Fabricantes";
@@ -12,50 +12,13 @@
     <div class="mb-3">
         <div class="d-inline-block me-2">
             <h2>@ViewData["Title"]</h2>
-            <br />
-            Total de fabricantes: @Model.Rows.Count
         </div>
         <div class="d-inline-block float-end">
             <a asp-action="Create" class="btn btn-primary" onclick="openEntityModal('@Url.Action("Create", "Manufacturer")','Cadastro de Fabricante'); return false;">Adicionar Fabricante</a>
         </div>
     </div>
 
-    @if (Model.Rows.Count == 0)
-    {
-        <p class="lead">Nenhum fabricante cadastrado.</p>
-    }
-    else
-    {
-        
-        <table class="table">
-            <thead>
-                <tr>
-                    @foreach (var column in Model.Columns)
-                    {
-                        <th>@column</th>
-                    }
-                    <th>Ações</th>
-                </tr>
-
-            </thead>
-            <tbody>
-                @foreach (var row in Model.Rows)
-                {
-                    <tr>
-                        @foreach (var key in Model.Keys)
-                        {
-                            <td>@row.GetType().GetProperty(key)?.GetValue(row)</td>
-                        }
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-warning btn-sm" onclick="openEntityModal(this.href, 'Edição de Fabricante'); return false;">Editar</a>
-                            <a asp-action="Delete" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-danger btn-sm" onclick="openDeleteModal(this.href, 'Exclusão de Fabricante'); return false;">Excluir</a>
-                        </td>
-                    </tr>
-
-                }
-            </tbody>
-        </table>
-    }
+    <partial name="_Table" model="Model" />
 </div>
 @section Scripts {
     @if (ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())

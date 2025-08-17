@@ -37,7 +37,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         {
             if (model.FundationYear > DateTime.Now.Year)
                 ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
-            
+
             if (!ModelState.IsValid)
                 return PartialView("_Form", model);
         }
@@ -46,7 +46,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         {
             var dto = _mapper.Map<ManufacturerDto>(model);
             await _ManufacturerService.CreateAsync(dto);
-            return Json(new { success = true, message = "Cadastro realizado com sucesso!" });
+            return Json(new { success = true, message = "Cadastro realizado com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
         }
         catch (InvalidOperationException ex)
         {
@@ -81,17 +81,17 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         {
             if (model.FundationYear > DateTime.Now.Year)
                 ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
-            
+
             if (!ModelState.IsValid)
                 ViewData["Action"] = "Edit";
-                return PartialView("_Form", model);
+            return PartialView("_Form", model);
         }
 
         try
         {
             var dto = _mapper.Map<ManufacturerDto>(model);
             await _ManufacturerService.UpdateAsync(dto);
-            return Json(new { success = true, message = "Cadastro atualizado com sucesso!" });
+            return Json(new { success = true, message = "Cadastro atualizado com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
         }
         catch (InvalidOperationException ex)
         {
@@ -121,7 +121,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         try
         {
             await _ManufacturerService.DeleteAsync(id);
-            return Json(new { success = true, message = "Cadastro excluído com sucesso!" });
+            return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
         }
         catch (InvalidOperationException ex)
         {
@@ -129,5 +129,18 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
                 ModelState.AddModelError(string.Empty, msg.Trim());
             return PartialView("_FormDelete", new ManufacturerViewModel { ManufacturerId = id });
         }
+    }
+
+
+    [HttpGet]
+    public async Task<IActionResult> GetTableData()
+    {
+        var model = new ManufacturerTableViewModel();
+        var manufacturers = await _ManufacturerService.GetAllAsync();
+        if (manufacturers != null)
+        {
+            model.Rows = _mapper.Map<List<ManufacturerViewModel>>(manufacturers);
+        }
+        return PartialView("_Table", model);
     }
 }
