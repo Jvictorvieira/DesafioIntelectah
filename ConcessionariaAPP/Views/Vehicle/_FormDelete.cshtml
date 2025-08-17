@@ -1,0 +1,7 @@
+@using ConcessionariaAPP.Models.VehicleViewModel
+@model VehicleViewModel
+
+<form id="deleteForm" asp-action="DeleteConfirmed" asp-route-id="@Model.VehicleId" method="post">
+    <input type="hidden" asp-for="VehicleId" />
+    <p>Tem certeza que deseja excluir o veículo <strong>@Model.Model</strong>?</p>
+</form>
