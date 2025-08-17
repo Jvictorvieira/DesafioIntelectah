@@ -1,0 +1,42 @@
+@using ConcessionariaAPP.Models.SaleViewModel
+@model SaleTableViewModel
+
+
+@{
+    ViewData["Title"] = "Vendas";
+
+    
+}
+
+<div class="">
+    <div class="mb-3">
+        <div class="d-inline-block me-2">
+            <h2>@ViewData["Title"]</h2>
+        </div>
+        <div class="d-inline-block float-end">
+            <a asp-action="Create" class="btn btn-primary" onclick="openEntityModal('@Url.Action("Create", "Sale")','Cadastro de Venda'); return false;">Adicionar Venda</a>
+        </div>
+    </div>
+
+    <partial name="_Table" model="Model" />
+</div>
+@section Scripts {
+    @if (ViewData.ModelState.Values.SelectMany(v => v.Errors).Any())
+    {
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                showErrorToast( '@string.Join("<br/>", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))');
+            });
+        </script>
+    }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            window.addEventListener('DOMContentLoaded', function () {
+                showSuccessToast('@TempData["SuccessMessage"]');
+            });
+        </script>
+    }
+    
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

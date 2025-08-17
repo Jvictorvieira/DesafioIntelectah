@@ -1,0 +1,43 @@
+@using ConcessionariaAPP.Models.SaleViewModel
+@model SaleTableViewModel
+
+<div itemid="data-table" id="data-table">
+    @if (Model.Rows.Count == 0)
+    {
+        <div class="alert alert-info" role="alert">
+            <p class="lead">Nenhum venda cadastrada.</p>
+        </div>
+    }
+    else
+    {
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    @foreach (var column in Model.Columns)
+                    {
+                        <th>@column</th>
+                    }
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var row in Model.Rows)
+                {
+                    <tr>
+                        @foreach (var key in Model.Keys)
+                        {
+                            <td>@row.GetType().GetProperty(key)?.GetValue(row)</td>
+                        }
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@row.GetType().GetProperty("SaleId")?.GetValue(row)" class="btn btn-warning btn-sm" onclick="openEntityModal(this.href, 'Edição de Venda'); return false;">Editar</a>
+                            <a asp-action="Delete" asp-route-id="@row.GetType().GetProperty("SaleId")?.GetValue(row)" class="btn btn-danger btn-sm" onclick="openDeleteModal(this.href, 'Exclusão de Venda'); return false;">Excluir</a>
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    }
+</div>
