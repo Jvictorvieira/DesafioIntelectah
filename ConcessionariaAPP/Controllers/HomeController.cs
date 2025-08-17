@@ -1,9 +1,10 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using ConcessionariaAPP.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ConcessionariaAPP.Controllers;
-
+[Authorize(Roles = "Admin, Manager, Seller")]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
