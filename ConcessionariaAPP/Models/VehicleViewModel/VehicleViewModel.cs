@@ -14,6 +14,7 @@ public class VehicleViewModel : BaseViewModel
     public string? Model { get; set; }
 
     [Display(Name = "Ano de fabricação do veículo")]
+    [Range(1900, int.MaxValue, ErrorMessage = "O ano de fabricação deve ser maior ou igual a 1900.")]
     public int? ManufacturingYear { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "O preço deve ser um valor positivo.")]
@@ -23,9 +24,9 @@ public class VehicleViewModel : BaseViewModel
 
     [Required(ErrorMessage = "O fabricante é obrigatório.")]
     [Display(Name = "Fabricante do veículo")]
-    public List<int> ManufacturerIds { get; set; } = [];
-    [Required(ErrorMessage = "O fabricante é obrigatório.")]
-    public List<string> ManufacturerNames { get; set; } = [];
+    public int ManufacturerId { get; set; }
+
+    public string? ManufacturerName { get; set; }
 
     [Display(Name = "Descrição")]
     public string? Description { get; set; }
@@ -34,12 +35,6 @@ public class VehicleViewModel : BaseViewModel
     [Display(Name = "Tipo de Veículo")]
     public VehiclesTypes VehicleType { get; set; }
 
-    public string Manufacturer { get; set; }
+    public string? VehicleTypeName { get; set; }
 
-    public VehicleViewModel()
-    {
-        Manufacturer = ManufacturerNames != null && ManufacturerNames.Count > 0
-            ? string.Join(", ", ManufacturerNames)
-            : "Nenhum fabricante selecionado";
-    }
 }

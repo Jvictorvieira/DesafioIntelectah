@@ -4,7 +4,7 @@ public class VehicleTableViewModel : TableViewModel<VehicleViewModel, VehicleFil
 {
     public VehicleTableViewModel()
     {
-        Columns = ["Id", "Modelo", "Ano de Fabricação", "Preço", "Fabricante"];
-        Keys = ["VehicleId", "Model", "ManufacturingYear", "Price", "Manufacturer"];
+        Columns = ["Id", "Modelo","Tipo de Veículo", "Ano de Fabricação", "Preço", "Fabricante"];
+        Keys = ["VehicleId", "Model", "VehicleTypeName", "ManufacturingYear", "Price", "ManufacturerName"];
     }
 }
