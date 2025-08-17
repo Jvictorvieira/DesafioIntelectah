@@ -12,11 +12,9 @@ public class VehicleDto : BaseDto
 
     public decimal Price { get; set; }
 
-    public int ManufacturerId { get; set; }
-
-    public string? ManufacturerName { get; set; }
+    public List<int> ManufacturerIds { get; set; } = [];
+    public List<string> ManufacturerNames { get; set; } = [];
 
     public string? Description { get; set; }
-
     public VehiclesTypes VehicleType { get; set; }
 }
