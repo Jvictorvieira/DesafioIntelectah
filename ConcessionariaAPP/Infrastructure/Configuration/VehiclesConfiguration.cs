@@ -23,7 +23,7 @@ public class VehiclesConfiguration : IEntityTypeConfiguration<Vehicles>
         builder.HasMany(v => v.Sales)
             .WithOne(s => s.Vehicle)
             .HasForeignKey(s => s.VehicleId);
-        builder.HasMany(v => v.Manufacturers)
+        builder.HasOne(v => v.Manufacturer)
             .WithMany(m => m.Vehicles);
         builder.HasIndex(v => v.Model)
             .HasDatabaseName("IX_Vehicles_Model");

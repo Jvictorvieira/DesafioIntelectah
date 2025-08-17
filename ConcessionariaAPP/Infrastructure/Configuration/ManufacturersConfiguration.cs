@@ -18,6 +18,6 @@ public class ManufacturersConfiguration : IEntityTypeConfiguration<Manufacturers
         builder.Property(m => m.WebSite)
             .HasMaxLength(255);
         builder.HasMany(m => m.Vehicles)
-            .WithMany(v => v.Manufacturers);
+            .WithOne(v => v.Manufacturer);
     }
 }
