@@ -29,6 +29,7 @@ public class VehiclesRepository(AppDbContext context) : IVehicleRepository
     {
         return await _context.Vehicles
             .AsNoTracking()
+            .Include(v => v.Manufacturer)
             .Where(v => !v.IsDeleted)
             .ToListAsync();
     }
