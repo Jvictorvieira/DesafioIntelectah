@@ -19,7 +19,7 @@ public class Vehicles : BaseEntity
 
     public int ManufacturerId { get; set; }
 
-    public List<Manufacturers> Manufacturers { get; set; } = [];
+    public required Manufacturers Manufacturer { get; set; }
 
     public string? Description { get; set; }
 

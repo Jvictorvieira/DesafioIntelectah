@@ -7,15 +7,13 @@ public class Clients : BaseEntity
     [Key]
     public int ClientId { get; set; }
 
-    [MaxLength(100, ErrorMessage = "O nome do cliente não pode exceder 100 caracteres.")]
-    [Required]
-    [Display(Name = "Nome do Cliente")]
+    [MaxLength(100)]
     public string Name { get; set; }
 
-    [MaxLength(11, ErrorMessage = "O CPF não pode exceder 11 caracteres.")]
+    [MaxLength(11)]
     public string Cpf { get; set; }
 
-    [MaxLength(15, ErrorMessage = "O telefone não pode exceder 15 caracteres.")]
+    [MaxLength(15)]
     [Display(Name = "Telefone")]
     public string Phone { get; set; }
 

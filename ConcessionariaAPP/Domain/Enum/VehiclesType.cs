@@ -9,9 +9,9 @@ public enum VehiclesTypes
     [DisplayAttribute(Name = "Moto")]
     Motorcycle,
     [DisplayAttribute(Name = "Caminhão")]
-    Caminhao,
+    Truck,
     [DisplayAttribute(Name = "Ônibus")]
-    bus,
+    Bus,
     [DisplayAttribute(Name = "Avião")]
     Airplane,
     [DisplayAttribute(Name = "Navio")]
