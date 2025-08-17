@@ -32,7 +32,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
     [HttpPost]
     public async Task<IActionResult> Create(ManufacturerViewModel model)
     {
-
+        ViewData["Action"] = "Create";
         if (!ModelState.IsValid || model.FundationYear > DateTime.Now.Year)
         {
             if (model.FundationYear > DateTime.Now.Year)
@@ -59,31 +59,33 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
     [HttpGet]
     public IActionResult Create()
     {
+        ViewData["Action"] = "Create";
         return PartialView("_Form", new ManufacturerViewModel());
     }
 
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
+        ViewData["Action"] = "Edit";
         var manufacturer = await _ManufacturerService.GetByIdAsync(id);
         if (manufacturer == null)
         {
             return NotFound();
         }
-        ViewData["Action"] = "Edit";
         var model = _mapper.Map<ManufacturerViewModel>(manufacturer);
         return PartialView("_Form", model);
     }
     [HttpPost]
     public async Task<IActionResult> Edit(ManufacturerViewModel model)
     {
+        ViewData["Action"] = "Edit";
         if (!ModelState.IsValid || model.FundationYear > DateTime.Now.Year)
         {
             if (model.FundationYear > DateTime.Now.Year)
                 ModelState.AddModelError(nameof(model.FundationYear), "O ano de fundação não pode ser maior que o ano atual.");
 
             if (!ModelState.IsValid)
-                ViewData["Action"] = "Edit";
+                
             return PartialView("_Form", model);
         }
 
@@ -95,7 +97,6 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         }
         catch (InvalidOperationException ex)
         {
-            ViewData["Action"] = "Edit";
             foreach (var msg in ex.Message.Split(';'))
                 ModelState.AddModelError(string.Empty, msg.Trim());
             return PartialView("_Form", model);
