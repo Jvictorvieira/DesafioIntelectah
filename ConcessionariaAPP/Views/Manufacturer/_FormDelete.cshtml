@@ -1,0 +1,7 @@
+@using ConcessionariaAPP.Models.ManufacturerViewModel
+@model ManufacturerViewModel
+
+<form id="deleteForm" asp-action="DeleteConfirmed" asp-route-id="@Model.ManufacturerId" method="post">
+    <input type="hidden" asp-for="ManufacturerId" />
+    <p>Tem certeza que deseja excluir o fabricante <strong>@Model.Name</strong>?</p>
+</form>
