@@ -1,0 +1,13 @@
+@using ConcessionariaAPP.Models.CarDealershipViewModel
+
+@model CarDealershipViewModel
+
+@{
+    ViewData["Title"] = "Car Dealership Form";
+    var action = ViewData["Action"] as string ?? "Create";
+}
+
+
+<form id="modalForm" asp-action="@action" method="post">
+    
+</form> 
