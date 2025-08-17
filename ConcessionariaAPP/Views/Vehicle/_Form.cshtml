@@ -1,12 +1,12 @@
 @using ConcessionariaAPP.Domain.Enum
 @using ConcessionariaAPP.Models.VehicleViewModel
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 @model VehicleViewModel
 
 @{
     ViewData["Title"] = "Vehicle Form";
     var action = ViewData["Action"] as string ?? "Create";
 }
-
 
 <form id="modalForm" asp-action="@action" method="post">
     @Html.AntiForgeryToken()
@@ -28,27 +28,25 @@
         <span asp-validation-for="ManufacturingYear" class="text-danger"></span>
     </div>
     <div class="mb-3">
-        <label asp-for="ManufacturerIds" class="form-label"></label>
-        <select asp-for="ManufacturerIds" asp-items="@(new SelectList(Model.ManufacturerNames, "Value", "Text"))" class="form-select" multiple>
-            <option value="">Selecione os fabricantes</option>
+        <label asp-for="ManufacturerId" class="form-label"></label>
+        <select asp-for="ManufacturerId" asp-items="ViewBag.Manufacturers"  class="form-select">
+            <option value="">Selecione o fabricante</option>
         </select>
-        <span asp-validation-for="ManufacturerIds" class="text-danger"></span>
+        <span asp-validation-for="ManufacturerId" class="text-danger"></span>
+    </div>
+    <div class="mb-3"></div>
+        <label asp-for="VehicleType" class="form-label"></label>
+        <select asp-for="VehicleType" asp-items="ViewBag.VehicleTypes" class="form-select">
+            <option value="">Selecione o tipo de veículo</option>
+            
+        </select>
+        <span asp-validation-for="VehicleType" class="text-danger"></span>
     </div>
     <div class="mb-3">
         <label asp-for="Description" class="form-label"></label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="VehicleType" class="form-label"></label>
-        <select asp-for="VehicleType" class="form-select">
-            <option value="">Selecione o tipo de veículo</option>
-            @foreach (var type in Enum.GetValues(typeof(VehiclesTypes)).Cast<VehiclesTypes>())
-            {
-                <option value="@type">@type</option>
-            }
-        </select>
-        <span asp-validation-for="VehicleType" class="text-danger"></span>
-    </div>
+    
 
 </form>
