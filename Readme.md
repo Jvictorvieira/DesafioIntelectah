@@ -100,13 +100,10 @@ ConcessionariaAPP/
   Refatorar queries para usar projeções, `Include` seletivo e paginação, reduzindo o consumo de memória e tempo de resposta.
 
 - **Estilo da página:**  
-  Melhorar o layout e responsividade, aplicar design mais moderno e intuitivo, padronizar componentes visuais.
+  Melhorar o layout e responsividade, aplicar design mais moderno e intuitivo.
 
 - **Adicionar Relatórios:**  
   Criar telas e exportação de relatórios (PDF, Excel) para vendas, clientes, veículos, etc.
-
-- **Melhorar validações:**  
-  Centralizar e aprimorar validações de negócio, aplicar validações customizadas no domínio e feedback visual nos formulários.
 
 - **Testes Unitários:**  
   Cobrir serviços, controllers e regras de negócio com testes unitários e de integração.
