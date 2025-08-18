@@ -14,8 +14,9 @@ public class SaleViewModel : BaseViewModel
     public string? VehicleModel { get; set; }
 
     [Required(ErrorMessage = "O cliente é obrigatório.")]
-    public int ClientId { get; set; }
     [Display(Name = "Cliente")]
+    public int ClientId { get; set; }
+    
     public string? ClientName { get; set; }
     
     [Display(Name = "Concessionária")]
