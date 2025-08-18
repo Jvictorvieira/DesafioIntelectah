@@ -27,32 +27,11 @@ function openEntityModal(url, title) {
             var modal = new bootstrap.Modal(document.getElementById('entityModal'));
             modal.show();
 
-            var modalForm = document.getElementById('modalForm');
-            if (modalForm) {
-                modalForm.onsubmit = function(e) {
-                    e.preventDefault();
-                    var url = modalForm.action;
-                    var formData = new FormData(modalForm);
+            
 
-                    fetch(url, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.text())
-                    .then(htmlOrJson => {
-                        try {
-                            var result = JSON.parse(htmlOrJson);
-                            if (result.success) {
-                                modal.hide();
-                                showSuccessToast(result.message);
-                                getTableData(result.url);
-                            }
-                        } catch {
-                            document.getElementById('entityModalBody').innerHTML = htmlOrJson;
-                        }
-                    });
-                };
-            }
+            processModalForm(modal);
+
+            
         });
 }
 
@@ -65,7 +44,7 @@ function openDeleteModal(url, title) {
         var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
         modal.show();
 
-        
+
         var deleteForm = document.getElementById('deleteForm');
         if (deleteForm) {
             deleteForm.onsubmit = function(e) {
@@ -101,4 +80,114 @@ function getTableData(url) {
         .then(html => {
             document.getElementById('data-table').innerHTML = html;
         });
+}
+
+function setFieldError(fieldName, message) {
+    var field = document.querySelector(`[name='${fieldName}']`);
+    if (field) {
+        // Adiciona classe de erro
+        field.classList.add('is-invalid');
+        // Cria ou atualiza o span de mensagem
+        let errorSpan = field.parentElement.querySelector('.field-validation-error');
+        if (!errorSpan) {
+            errorSpan = document.createElement('span');
+            errorSpan.className = 'field-validation-error text-danger';
+            field.parentElement.appendChild(errorSpan);
+        }
+        errorSpan.textContent = message;
+    }
+}
+
+function clearFieldError(fieldName) {
+    var field = document.querySelector(`[name='${fieldName}']`);
+    if (field) {
+        field.classList.remove('is-invalid');
+        let errorSpan = field.parentElement.querySelector('.field-validation-error');
+        if (errorSpan) errorSpan.textContent = '';
+    }
+}
+
+async function validateCep(cep) {
+    const response = await fetch(`https://viacep.com.br/ws/${cep}/json`);
+    const data = await response.json();
+    if (data.erro) {
+        setFieldError('AddressCode', 'CEP inválido!');
+        
+    }
+
+    // Atualiza os campos do formulário
+    document.querySelector('[name="Address"]').value = data.logradouro || '';
+    document.querySelector('[name="City"]').value = data.localidade || '';
+    document.querySelector('[name="State"]').value = data.estado || data.uf || '';
+
+
+}
+
+function initCepMask() {
+    var cepInput = document.getElementById('cepInput');
+    if (cepInput) {
+        cepInput.addEventListener('input', function() {
+            //Mascara CEP
+            let v = cepInput.value.replace(/\D/g, '');
+            if (v.length > 5) v = v.replace(/^(\d{5})(\d)/, '$1-$2');
+            cepInput.value = v;
+
+            if (v.replace('-', '').length === 8) {
+                validateCep(v.replace('-', ''));
+            }
+        });
+    }
+};
+
+function initPhoneMask() {
+    var phoneInput = document.getElementById('phoneInput');
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            let v = phoneInput.value.replace(/\D/g, '');
+            if (v.length <= 10) {
+                // Formato (99) 9999-9999
+                v = v.replace(/^(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+            } else {
+                // Formato (99) 99999-9999
+                v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+            }
+            phoneInput.value = v.trim().replace(/[-\s]+$/, '');
+        });
+    }
+}
+
+function processModalForm(modal) {
+    initCepMask();
+    initPhoneMask();
+    var modalForm = document.getElementById('modalForm');
+    if (modalForm) {
+        modalForm.onsubmit = function (e) {
+            e.preventDefault();
+            var url = modalForm.action;
+            var formData = new FormData(modalForm);
+
+            clearFieldError('Cep');
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.text())
+                .then(htmlOrJson => {
+                    try {
+                        var result = JSON.parse(htmlOrJson);
+                        if (result.success) {
+                            debugger
+                            modal.hide();
+                            showSuccessToast(result.message);
+                            getTableData(result.url);
+                        }
+                    } catch {
+                        debugger
+                        document.getElementById('entityModalBody').innerHTML = htmlOrJson;
+                        processModalForm();
+                    }
+                });
+        };
+    }
 }
