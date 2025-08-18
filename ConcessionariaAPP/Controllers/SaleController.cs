@@ -93,6 +93,7 @@ public class SaleController(ISaleService SaleService,
 
         if (!ModelState.IsValid)
         {
+            await LoadSelectsAsync(model.ClientId, model.VehicleId, model.CarDealershipId);
             return PartialView("_Form", model);
         }
         try
@@ -104,6 +105,7 @@ public class SaleController(ISaleService SaleService,
         catch (AppValidationException ex)
         {
             HandleException(ex);
+            await LoadSelectsAsync(model.ClientId, model.VehicleId, model.CarDealershipId);
             return PartialView("_Form", model);
         }
     }

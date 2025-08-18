@@ -31,8 +31,8 @@ public class SaleRepository(AppDbContext context) : ISaleRepository
             .AsNoTracking()
             .Include(v => v.Client)
             .Include(v => v.Vehicle)
+            .Include(v => v.Vehicle.Manufacturer)
             .Include(v => v.CarDealership)
-            .Where(v => !v.IsDeleted)
             .ToListAsync();
     }
 
