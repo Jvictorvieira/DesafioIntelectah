@@ -7,11 +7,11 @@ namespace ConcessionariaAPP.Models.ClientViewModel
         {
             Columns =
             [
-                "Id", "Nome", "CPF", "Email", "Telefone"
+                "Id", "Nome", "CPF", "Telefone"
             ];
             Keys =
             [
-                "ClientId", "Name", "Cpf", "Email", "Phone"
+                "ClientId", "Name", "Cpf", "Phone"
             ];
         }
     }
