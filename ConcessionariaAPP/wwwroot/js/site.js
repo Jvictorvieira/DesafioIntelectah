@@ -124,7 +124,7 @@ async function validateCep(cep) {
 }
 
 function initCepMask() {
-    var cepInput = document.getElementById('cepInput');
+    var cepInput = document.getElementById('AddressCode');
     if (cepInput) {
         cepInput.addEventListener('input', function() {
             //Mascara CEP
@@ -140,7 +140,7 @@ function initCepMask() {
 };
 
 function initPhoneMask() {
-    var phoneInput = document.getElementById('phoneInput');
+    var phoneInput = document.getElementById('Phone');
     if (phoneInput) {
         phoneInput.addEventListener('input', function() {
             let v = phoneInput.value.replace(/\D/g, '');
@@ -152,6 +152,26 @@ function initPhoneMask() {
                 v = v.replace(/^(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
             }
             phoneInput.value = v.trim().replace(/[-\s]+$/, '');
+        });
+    }
+}
+function initCpfMask(){
+    var cpfInput = document.getElementById('Cpf');
+    if (cpfInput) {
+        cpfInput.addEventListener('input', function() {
+            let v = cpfInput.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 9) {
+                // Formato 999.999.999-99
+                v = v.replace(/^(\d{3})(\d{3})(\d{0,2})/, '$1.$2-$3');
+            } else if (v.length > 6) {
+                // Formato 999.999-99
+                v = v.replace(/^(\d{3})(\d{3})(\d{0,2})/, '$1.$2-$3');
+            } else if (v.length > 3) {
+                // Formato 999-99
+                v = v.replace(/^(\d{3})(\d{0,2})/, '$1-$2');
+            }
+            cpfInput.value = v.trim().replace(/[-\s]+$/, '');
         });
     }
 }
@@ -185,7 +205,7 @@ function processModalForm(modal) {
                     } catch {
                         debugger
                         document.getElementById('entityModalBody').innerHTML = htmlOrJson;
-                        processModalForm();
+                        processModalForm(modal);
                     }
                 });
         };
