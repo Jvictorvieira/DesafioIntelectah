@@ -21,5 +21,6 @@ public class ManufacturerViewModel : BaseViewModel
     public int FundationYear { get; set; }
 
     [MaxLength(255, ErrorMessage = "O site não pode exceder 255 caracteres.")]
+    [RegularExpression(@"^(https?://)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*/?$", ErrorMessage = "O site deve ser um URL válido.")]
     public string? WebSite { get; set; }
 }

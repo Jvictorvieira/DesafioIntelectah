@@ -28,7 +28,14 @@
                     <tr>
                         @foreach (var key in Model.Keys)
                         {
-                            <td>@row.GetType().GetProperty(key)?.GetValue(row)</td>
+                            <td> 
+                                @if (key == "WebSite"){
+                                    <a href="@row.GetType().GetProperty(key)?.GetValue(row)" target="_blank">@row.GetType().GetProperty(key)?.GetValue(row)</a>
+                                }
+                                else{
+                                    <span>@row.GetType().GetProperty(key)?.GetValue(row)</span>
+                                }
+                            </td>
                         }
                         <td>
                             <a asp-action="Edit" asp-route-id="@row.GetType().GetProperty("ManufacturerId")?.GetValue(row)" class="btn btn-warning btn-sm" onclick="openEntityModal(this.href, 'Edição de Fabricante'); return false;">Editar</a>
