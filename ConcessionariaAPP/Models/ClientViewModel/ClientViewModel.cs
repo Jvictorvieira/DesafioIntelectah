@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ConcessionariaAPP.Models.Attributes;
 
 namespace ConcessionariaAPP.Models.ClientViewModel;
 
@@ -14,6 +15,7 @@ public class ClientViewModel : BaseViewModel
     [Required(ErrorMessage = "O CPF do cliente é obrigatório.")]
     [Display(Name = "CPF")]
     [RegularExpression(@"\d{11}", ErrorMessage = "O CPF deve conter 11 dígitos.")]
+    [Cpf(ErrorMessage = "CPF inválido.")]
     public string? Cpf { get; set; }
 
     [MaxLength(15, ErrorMessage = "O telefone não pode exceder 15 caracteres.")]
