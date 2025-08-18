@@ -1,5 +1,6 @@
 using ConcessionariaAPP.Infrastructure; // seu AppDbContext
 using ConcessionariaAPP.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -29,7 +36,13 @@ if (!app.Environment.IsDevelopment())
 // Seed roles
 RolesSeedConfiguration.SeedRoles(app.Services).GetAwaiter().GetResult(); // Seed roles
 
-app.UseHttpsRedirection();
+var isDocker = Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true";
+
+if (!isDocker && !app.Environment.IsDevelopment())
+{
+    app.UseHsts();
+    app.UseHttpsRedirection();
+}
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
