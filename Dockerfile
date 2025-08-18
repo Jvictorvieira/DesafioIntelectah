@@ -12,4 +12,11 @@ RUN dotnet publish -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "ConcessionariaAPP.dll"]
+COPY ConcessionariaAPP/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Instala dotnet-ef globalmente para aplicar migrações
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+ENTRYPOINT ["/entrypoint.sh"]
