@@ -78,15 +78,8 @@ public class SaleAppService : ISaleService
     
     private static string GenerateProtocol()
     {
-
-        var numericString = RemoveNonNumericCharacters(Guid.NewGuid().ToString());
-        return numericString;
+        var random = new Random();
+        return new string([.. Enumerable.Repeat("0123456789", 20).Select(s => s[random.Next(s.Length)])]);
     }
-
-    private static string RemoveNonNumericCharacters(string value)
-    {
-        return new string([.. value.Where(char.IsDigit)])[..20];
-    }
-    
 
 }
