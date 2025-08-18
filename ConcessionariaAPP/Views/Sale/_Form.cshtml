@@ -9,5 +9,35 @@
 
 
 <form id="modalForm" asp-action="@action" method="post">
-    
+    <div class="mb-3">
+        <label asp-for="ClientId" class="form-label"></label>
+        <select asp-for="ClientId" asp-items="ViewBag.Clients"  class="form-select">
+            <option value="">Selecione o cliente</option>
+        </select>
+        <span asp-validation-for="ClientId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="VehicleId" class="form-label"></label>
+        <select asp-for="VehicleId" asp-items="ViewBag.Vehicles"  class="form-select">
+            <option value="">Selecione o veículo</option>
+        </select>
+        <span asp-validation-for="VehicleId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="CarDealershipId" class="form-label"></label>
+        <select asp-for="CarDealershipId" asp-items="ViewBag.CarDealerships"  class="form-select">
+            <option value="">Selecione a concessionária</option>
+        </select>
+        <span asp-validation-for="CarDealershipId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="SaleDate" class="form-label"></label>
+        <input asp-for="SaleDate" class="form-control" />
+        <span asp-validation-for="SaleDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="SalePrice" class="form-label"></label>
+        <input asp-for="SalePrice" class="form-control" />
+        <span asp-validation-for="SalePrice" class="text-danger"></span>
+    </div>
 </form> 
