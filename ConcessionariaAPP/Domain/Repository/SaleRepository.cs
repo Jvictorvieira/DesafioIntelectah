@@ -44,7 +44,7 @@ public class SaleRepository(AppDbContext context) : ISaleRepository
             ?? throw new KeyNotFoundException("Venda não encontrada.");
     }
 
-    
+
 
     public async Task<Sales> UpdateAsync(Sales entity)
     {
@@ -54,8 +54,13 @@ public class SaleRepository(AppDbContext context) : ISaleRepository
         existingSale.ClientId = entity.ClientId;
         existingSale.VehicleId = entity.VehicleId;
         existingSale.CarDealershipId = entity.CarDealershipId;
+        existingSale.SalePrice = entity.SalePrice;
+        existingSale.SaleDate = entity.SaleDate;
 
         await _context.SaveChangesAsync();
         return existingSale;
     }
+
+    
 }
+
