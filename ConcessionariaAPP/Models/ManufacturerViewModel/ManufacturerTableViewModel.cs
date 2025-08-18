@@ -18,8 +18,8 @@ namespace ConcessionariaAPP.Models.ManufacturerViewModel
             [
                 "ManufacturerId",
                 "Name",
-                "FundationYear",
                 "Country",
+                "FundationYear",
                 "WebSite",
                 "IsDeleted"
             ];
