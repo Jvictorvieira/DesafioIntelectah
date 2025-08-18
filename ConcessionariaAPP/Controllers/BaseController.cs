@@ -13,9 +13,18 @@ public class BaseController : Controller
     {
         foreach (var (field, messages) in ex.Errors)
         {
-            var key =  field;
+            var key = field;
             foreach (var msg in messages)
                 this.ModelState.AddModelError(key, msg);
         }
+    }
+    
+    protected string GetDisplayName(Enum value)
+    {
+        var field = value.GetType().GetField(value.ToString());
+        var attr = field?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+                        .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>()
+                        .FirstOrDefault();
+        return attr?.Name ?? value.ToString();
     }
 }

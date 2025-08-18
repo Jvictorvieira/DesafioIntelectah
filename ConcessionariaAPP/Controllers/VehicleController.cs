@@ -160,14 +160,6 @@ public class VehicleController(IVehicleService vehicleService, IManufacturerServ
         }), "Value", "Text", vehicleTypeId);
     }
 
-    public string GetDisplayName(Enum value)
-    {
-        var field = value.GetType().GetField(value.ToString());
-        var attr = field?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
-                        .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>()
-                        .FirstOrDefault();
-        return attr?.Name ?? value.ToString();
-    }
 
     private async Task LoadTable(VehicleTableViewModel model)
     {
