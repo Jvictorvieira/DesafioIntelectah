@@ -14,7 +14,7 @@ services:
   webapp:
     build:
       context: .
-      dockerfile: ConcessionariaAPP/Dockerfile
+      dockerfile: Dockerfile
     container_name: concessionaria_webapp
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
