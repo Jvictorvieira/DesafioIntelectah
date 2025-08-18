@@ -30,6 +30,7 @@ public class CarDealershipViewModel : BaseViewModel
 
     [MaxLength(15, ErrorMessage = "O telefone não pode exceder 15 caracteres.")]
     [Display(Name = "Telefone")]
+    [Phone(ErrorMessage = "O telefone fornecido não é válido.")]
     public string? Phone { get; set; }
 
     [MaxLength(100, ErrorMessage = "O email não pode exceder 100 caracteres.")]
