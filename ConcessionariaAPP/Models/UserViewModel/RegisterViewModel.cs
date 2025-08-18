@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ConcessionariaAPP.Domain.Enum;
 namespace ConcessionariaAPP.Models.UserViewModel;
 
 public class RegisterViewModel
@@ -22,4 +23,8 @@ public class RegisterViewModel
     [Compare("Password", ErrorMessage = "A senha e a confirmação de senha não coincidem.")]
     [Required(ErrorMessage = "O campo Corfieme a Senha é obrigatório.")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "O campo Nível de Acesso é obrigatório.")]
+    [Display(Name = "Nível de Acesso")]
+    public AccessLevel AccessLevel { get; set; }
 }

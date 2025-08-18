@@ -39,6 +39,17 @@
                     <input asp-for="ConfirmPassword" type="password" class="form-control" />
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
+
+                <div class="mb-3">
+                    <label asp-for="AccessLevel" class="form-label"></label>
+                    <select asp-for="AccessLevel" class="form-select">
+                        @foreach (var item in ViewBag.AccessLevels)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                    <span asp-validation-for="AccessLevel" class="text-danger"></span>
+                </div>
                 <div class="float-end">
                     <button type="submit" class="btn btn-primary">Cadastrar</button>
                     <a class="btn btn-secondary" asp-action="Login">Login</a>

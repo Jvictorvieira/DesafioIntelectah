@@ -4,6 +4,8 @@ using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Models.UserViewModel;
 using Microsoft.AspNetCore.Authorization;
 using ConcessionariaAPP.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using ConcessionariaAPP.Domain.Enum;
 
 namespace ConcessionariaAPP.Controllers;
 
@@ -58,6 +60,7 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Register()
     {
+        LoadSelects();
         return View();
     }
 
@@ -65,6 +68,7 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        LoadSelects();
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -74,11 +78,12 @@ public class AccountController : Controller
             UserName = model.Email,
             Email = model.Email,
             Name = model.Name,
+            AccessLevel = model.AccessLevel
         };
         var result = await _userManager.CreateAsync(user, model.Password);
         if (result.Succeeded)
         {
-            var roleResult = await _userManager.AddToRoleAsync(user, Roles.Seller); // Default role for new users
+            var roleResult = await _userManager.AddToRoleAsync(user, GetRoles(user.AccessLevel)); // Default role for new users
             if (roleResult.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
@@ -99,5 +104,40 @@ public class AccountController : Controller
 
         return View(model);
     }
+
+    private void LoadSelects()
+    {
+        ViewBag.AccessLevels = new SelectList(Enum.GetValues(typeof(AccessLevel)).Cast<AccessLevel>().Select(v => new
+        {
+            Value = v,
+            Text = GetDisplayName(v)
+        }), "Value", "Text");
+    }
+
+    public string GetDisplayName(Enum value)
+    {
+        var field = value.GetType().GetField(value.ToString());
+        var attr = field?.GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.DisplayAttribute), false)
+                        .Cast<System.ComponentModel.DataAnnotations.DisplayAttribute>()
+                        .FirstOrDefault();
+        return attr?.Name ?? value.ToString();
+    }
+
+    private static string GetRoles(AccessLevel accessLevel)
+    {
+        switch (accessLevel)
+        {
+            case AccessLevel.Admin:
+                return Roles.Admin;
+            case AccessLevel.Manager:
+                return Roles.Manager;
+            default:
+                return Roles.Seller;
+        }
+    }
+
+
+
+    
 
 }

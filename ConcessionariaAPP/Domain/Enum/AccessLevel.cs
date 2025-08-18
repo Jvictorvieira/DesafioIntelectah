@@ -10,6 +10,6 @@ public enum AccessLevel
     Manager,
     [DisplayAttribute(Name = "Vendedor")]
     Seller,
-    [DisplayAttribute(Name = "Cliente")]
-    Client // Cliente?
+    // [DisplayAttribute(Name = "Cliente")]
+    // Client // Cliente?
 }
