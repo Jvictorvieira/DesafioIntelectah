@@ -7,6 +7,7 @@ public class SaleViewModel : BaseViewModel
 {
     public int? SaleId { get; set; }
 
+    [Display(Name = "Veículo")]
     [Required(ErrorMessage = "O veículo é obrigatório.")]
     public int VehicleId { get; set; }
 
@@ -14,9 +15,10 @@ public class SaleViewModel : BaseViewModel
 
     [Required(ErrorMessage = "O cliente é obrigatório.")]
     public int ClientId { get; set; }
-
+    [Display(Name = "Cliente")]
     public string? ClientName { get; set; }
-
+    
+    [Display(Name = "Concessionária")]
     [Required(ErrorMessage = "A concessionária é obrigatória.")]
     public int CarDealershipId { get; set; }
 
@@ -25,12 +27,13 @@ public class SaleViewModel : BaseViewModel
     [Column(TypeName = "decimal(10,2)")]
     [Display(Name = "Preço de Venda")]
     [Required(ErrorMessage = "O preço de venda é obrigatório.")]
+    [Range(0.01, double.MaxValue, ErrorMessage = "O preço de venda deve ser um valor positivo.")]
     public decimal SalePrice { get; set; }
 
     [DataType(DataType.Date)]
     [Display(Name = "Data da Venda")]
     [Required(ErrorMessage = "A data da venda é obrigatória.")]
-    public DateTime SaleDate { get; set; }
+    public DateTime SaleDate { get; set; } = DateTime.Now;
 
     [Display(Name = "Protocolo de Venda")]
     [MaxLength(20)]
