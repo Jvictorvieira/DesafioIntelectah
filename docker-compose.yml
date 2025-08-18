@@ -4,12 +4,25 @@ services:
     container_name: sqlserver_concessionaria
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=${SA_PASSWORD}   # troque por uma senha forte
+      - MSSQL_SA_PASSWORD=${SA_PASSWORD}
       - MSSQL_PID=Developer
     ports:
       - "1433:1433"
     volumes:
       - mssql-data:/var/opt/mssql
+
+  webapp:
+    build:
+      context: .
+      dockerfile: ConcessionariaAPP/Dockerfile
+    container_name: concessionaria_webapp
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=ConcessionariaDb;User Id=sa;Password=${SA_PASSWORD};Encrypt=True;TrustServerCertificate=True
+    ports:
+      - "8080:80"
+    depends_on:
+      - sqlserver
 
 volumes:
   mssql-data:
