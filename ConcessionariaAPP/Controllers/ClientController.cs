@@ -9,12 +9,13 @@ using AutoMapper;
 using ConcessionariaAPP.Application.Dto;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using ConcessionariaAPP.Application.Excepetions;
 
 namespace ConcessionariaAPP.Controllers;
 
 
 [Authorize(Roles = "Admin, Manager")]
-public class ClientController(IClientService ClientService, IMapper mapper) : Controller
+public class ClientController(IClientService ClientService, IMapper mapper) : BaseController
 {
 
     private readonly IClientService _ClientService = ClientService;
@@ -87,10 +88,9 @@ public class ClientController(IClientService ClientService, IMapper mapper) : Co
             await _ClientService.UpdateAsync(dto);
             return Json(new { success = true, message = "Cadastro atualizado com sucesso!", url = Url.Action("GetTableData", "Client") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_Form", model);
         }
     }
@@ -116,10 +116,9 @@ public class ClientController(IClientService ClientService, IMapper mapper) : Co
             await _ClientService.DeleteAsync(id);
             return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "Client") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_FormDelete", new ClientViewModel { ClientId = id });
         }
     }

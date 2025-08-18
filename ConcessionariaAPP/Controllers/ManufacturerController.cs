@@ -9,12 +9,13 @@ using AutoMapper;
 using ConcessionariaAPP.Application.Dto;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using ConcessionariaAPP.Application.Excepetions;
 
 namespace ConcessionariaAPP.Controllers;
 
 
 [Authorize(Roles = "Admin")]
-public class ManufacturerController(IManufacturerService ManufacturerService, IMapper mapper) : Controller
+public class ManufacturerController(IManufacturerService ManufacturerService, IMapper mapper) : BaseController
 {
 
     private readonly IManufacturerService _ManufacturerService = ManufacturerService;
@@ -48,10 +49,9 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
             await _ManufacturerService.CreateAsync(dto);
             return Json(new { success = true, message = "Cadastro realizado com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_Form", model);
         }
     }
@@ -95,10 +95,9 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
             await _ManufacturerService.UpdateAsync(dto);
             return Json(new { success = true, message = "Cadastro atualizado com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_Form", model);
         }
     }

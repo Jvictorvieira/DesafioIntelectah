@@ -9,12 +9,13 @@ using ConcessionariaAPP.Models.VehicleViewModel;
 using ConcessionariaAPP.Application.Dto;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ConcessionariaAPP.Domain.Enum;
+using ConcessionariaAPP.Application.Excepetions;
 
 namespace ConcessionariaAPP.Controllers;
 
 
 [Authorize(Roles = "Admin, Manager")]
-public class VehicleController(IVehicleService vehicleService, IManufacturerService manufacturerService, IMapper mapper) : Controller
+public class VehicleController(IVehicleService vehicleService, IManufacturerService manufacturerService, IMapper mapper) : BaseController
 {
 
     private readonly IVehicleService _vehicleService = vehicleService;
@@ -62,10 +63,9 @@ public class VehicleController(IVehicleService vehicleService, IManufacturerServ
                 url = Url.Action("GetTableData", "Vehicle")
             });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             await LoadSelects();
             return PartialView("_Form", viewModel);
         }
@@ -104,10 +104,9 @@ public class VehicleController(IVehicleService vehicleService, IManufacturerServ
             await _vehicleService.UpdateAsync(dto);
             return Json(new { success = true, message = "Atualização realizada com sucesso!", url = Url.Action("GetTableData", "Vehicle") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             await LoadSelects(viewModel.ManufacturerId, (int?)viewModel.VehicleType);
             return PartialView("_Form", viewModel);
         }

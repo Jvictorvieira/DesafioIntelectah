@@ -9,12 +9,13 @@ using AutoMapper;
 using ConcessionariaAPP.Application.Dto;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
+using ConcessionariaAPP.Application.Excepetions;
 
 namespace ConcessionariaAPP.Controllers;
 
 
 [Authorize(Roles = "Admin")]
-public class CarDealershipController(ICarDealershipService CarDealershipService, IMapper mapper) : Controller
+public class CarDealershipController(ICarDealershipService CarDealershipService, IMapper mapper) : BaseController
 {
 
     private readonly ICarDealershipService _CarDealershipService = CarDealershipService;
@@ -87,10 +88,9 @@ public class CarDealershipController(ICarDealershipService CarDealershipService,
             await _CarDealershipService.UpdateAsync(dto);
             return Json(new { success = true, message = "Cadastro atualizado com sucesso!", url = Url.Action("GetTableData", "CarDealership") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_Form", model);
         }
     }
@@ -116,10 +116,9 @@ public class CarDealershipController(ICarDealershipService CarDealershipService,
             await _CarDealershipService.DeleteAsync(id);
             return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "CarDealership") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_FormDelete", new CarDealershipViewModel { CarDealershipId = id });
         }
     }
