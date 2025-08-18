@@ -4,8 +4,9 @@ namespace ConcessionariaAPP.Domain.Enum;
 
 public enum VehiclesTypes
 {
+
     [DisplayAttribute(Name = "Carro")]
-    Car,
+    Car = 1,
     [DisplayAttribute(Name = "Moto")]
     Motorcycle,
     [DisplayAttribute(Name = "Caminhão")]
