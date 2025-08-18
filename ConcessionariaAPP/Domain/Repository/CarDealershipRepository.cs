@@ -46,7 +46,7 @@ public class CarDealershipRepository(AppDbContext context) : ICarDealershipRepos
     {
         return await _context.CarDealerships
             .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.Name == name && !m.IsDeleted)
+            .FirstOrDefaultAsync(m => m.Name == name)
             ?? throw new KeyNotFoundException("Fabricante não encontrado.");
     }
 
@@ -55,6 +55,13 @@ public class CarDealershipRepository(AppDbContext context) : ICarDealershipRepos
         var existing = await _context.CarDealerships.FindAsync(entity.CarDealershipId)
             ?? throw new KeyNotFoundException("Fabricante não encontrado.");
 
+        existing.Name = entity.Name;
+        existing.Address = entity.Address;
+        existing.City = entity.City;
+        existing.State = entity.State;
+        existing.Phone = entity.Phone;
+        existing.Email = entity.Email;
+        existing.MaxVehicleCapacity = entity.MaxVehicleCapacity;
 
         await _context.SaveChangesAsync();
         return existing;

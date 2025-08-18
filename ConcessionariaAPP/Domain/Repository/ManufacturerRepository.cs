@@ -46,7 +46,7 @@ public class ManufacturerRepository(AppDbContext context) : IManufacturerReposit
     {
         return await _context.Manufacturers
             .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.Name == name && !m.IsDeleted)
+            .FirstOrDefaultAsync(m => m.Name == name)
             ?? throw new KeyNotFoundException("Fabricante não encontrado.");
     }
 

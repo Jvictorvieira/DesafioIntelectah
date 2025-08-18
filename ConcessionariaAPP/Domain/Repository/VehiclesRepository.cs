@@ -46,7 +46,7 @@ public class VehiclesRepository(AppDbContext context) : IVehicleRepository
     {
         return await _context.Vehicles
             .AsNoTracking()
-            .FirstOrDefaultAsync(v => v.Model == modelName && !v.IsDeleted)
+            .FirstOrDefaultAsync(v => v.Model == modelName)
             ?? throw new KeyNotFoundException("Veículo com o modelo especificado não encontrado.");
     }
 

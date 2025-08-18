@@ -42,11 +42,11 @@ public class ClientRepository(AppDbContext context) : IClientRepository
             ?? throw new KeyNotFoundException("Fabricante não encontrado.");
     }
 
-    public async Task<Clients> GetByNameAsync(string name)
+    public async Task<Clients> GetByCpfAsync(string cpf)
     {
         return await _context.Clients
             .AsNoTracking()
-            .FirstOrDefaultAsync(m => m.Name == name && !m.IsDeleted)
+            .FirstOrDefaultAsync(m => m.Cpf == cpf)
             ?? throw new KeyNotFoundException("Fabricante não encontrado.");
     }
 
@@ -54,7 +54,11 @@ public class ClientRepository(AppDbContext context) : IClientRepository
     {
         var existing = await _context.Clients.FindAsync(entity.ClientId)
             ?? throw new KeyNotFoundException("Fabricante não encontrado.");
-            
+
+        existing.Name = entity.Name;
+        existing.Cpf = entity.Cpf;
+        existing.Phone = entity.Phone;
+        
         await _context.SaveChangesAsync();
         return existing;
     }
