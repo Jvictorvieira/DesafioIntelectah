@@ -1,0 +1,42 @@
+@using ConcessionariaAPP.Models.HomeViewModel;
+@model HomeFilterViewModel
+
+<div class="row" id="dashboardCharts">
+    @Html.Hidden("salesPerMonthData", Json.Serialize(Model.SalesPerMonth.Data))
+    @Html.Hidden("salesPerClientData", Json.Serialize(Model.SalesPerClient.Data))
+    @Html.Hidden("salesPerVehicleTypeData", Json.Serialize(Model.SalesPerVehicleType.Data))
+    @Html.Hidden("salesPerCarDealershipData", Json.Serialize(Model.SalesPerCarDealership.Data))
+    @Html.Hidden("salesPerManufacturerData", Json.Serialize(Model.SalesPerManufacturer.Data))
+
+    @Html.Hidden("salesPerMonthLabels", Json.Serialize(Model.SalesPerMonth.Labels))
+    @Html.Hidden("salesPerClientLabels", Json.Serialize(Model.SalesPerClient.Labels))
+    @Html.Hidden("salesPerVehicleTypeLabels", Json.Serialize(Model.SalesPerVehicleType.Labels))
+    @Html.Hidden("salesPerCarDealershipLabels", Json.Serialize(Model.SalesPerCarDealership.Labels))
+    @Html.Hidden("salesPerManufacturerLabels", Json.Serialize(Model.SalesPerManufacturer.Labels))
+    <div class="row">
+        <div class="col-md-6  p-3 charts">
+
+            <h4>Vendas por mês</h4>
+            <canvas id="salesPerMonth"></canvas>
+        </div>
+
+        <div class="col-md-6  p-3  charts">
+            <h4>Vendas por Cliente</h4>
+
+            <canvas id="salesPerClient" width="400"></canvas>
+        </div>
+        <div class="col-md-6 p-3 charts">
+            <h4>Vendas por Tipo de Veículo</h4>
+
+            <canvas id="salesPerVehicleType" width="400"></canvas>
+        </div>
+        <div class="col-md-6 p-3  charts">
+            <h4>Vendas por Concessionária</h4>
+            <canvas id="salesPerCarDealership" width="400"></canvas>
+        </div>
+        <div class="col-md-6 p-3 charts">
+            <h4>Vendas por Tipo de Fabricante</h4>
+            <canvas id="salesPerManufacturer" width="400"></canvas>
+        </div>
+    </div>
+</div>

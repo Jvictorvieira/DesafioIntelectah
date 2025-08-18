@@ -1,8 +1,68 @@
-﻿@{
+﻿@using ConcessionariaAPP.Models.HomeViewModel;
+@model HomeFilterViewModel
+@{
     ViewData["Title"] = "Home Page";
+    
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row">
+    <h2 class="">Dashboards</h2>
+    <!-- Filtro -->
+    <form asp-action="Filter" id="filterForm" method="get">
+        <div class="row d-flex align-items-end flex-wrap">
+            <div class="form-group col-md-2">
+                <label for="CarDealershipId">Concessionária</label>
+                <select asp-for="CarDealershipId" class="form-control" asp-items="@ViewBag.CarDealerships">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2 ">
+                <label for="VehicleTypeId">Veículo</label>
+                <select asp-for="VehicleTypeId" class="form-control" asp-items="@ViewBag.VehicleTypes">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2 ">
+                <label for="ClientId">Cliente</label>
+                <select asp-for="ClientId" class="form-control" asp-items="@ViewBag.Clients">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2 ">
+                <label for="ManufacturerId">Fabricante</label>
+                <select asp-for="ManufacturerId" class="form-control" asp-items="@ViewBag.Manufacturers">
+                    <option value="">Selecione</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2 ">
+                <label for="StartDate">De</label>
+                <input type="date" asp-for="StartDate" class="form-control" />
+            </div>
+            <div class="form-group col-md-2 ">
+                <label for="EndDate">Até</label>
+                <input type="date" asp-for="EndDate" class="form-control" />
+            </div>
+            <div class="form-group pt-2 col-md-2">
+                <button type="submit" class="btn btn-primary" >Filtrar</button>
+            </div>
+        </div>
+    </form>
+    <!-- Graficos -->
+    <div id="dashboard" class="mt-4">
+        @await Html.PartialAsync("_Dashboard", Model)
+    </div>
+
 </div>
+@section Scripts {
+    <script src="~/js/home.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            GetChartsData();
+            LoadSalesByMonthChart();
+            LoadSalesByVehicleTypeChart();
+            LoadSalesPerCarDealershipChart();
+            LoadSalesPerManufacturerChart();
+            LoadSalesPerClientChart();
+        });
+    </script>
+}
