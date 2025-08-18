@@ -9,5 +9,21 @@
 
 
 <form id="modalForm" asp-action="@action" method="post">
-    
-</form> 
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Cpf"></label>
+        <input asp-for="Cpf" class="form-control" />
+        <span asp-validation-for="Cpf" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+</form>
