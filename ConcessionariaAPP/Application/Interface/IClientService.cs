@@ -4,5 +4,5 @@ using ConcessionariaAPP.Application.Dto;
 
 public interface IClientService : IGenericCrudInterface<ClientDto>
 {
-    Task<bool> ExistsByNameAsync(string name, int id = 0);
+    Task<bool> ExistsByCpfAsync(string cpf, int id = 0);
 }
