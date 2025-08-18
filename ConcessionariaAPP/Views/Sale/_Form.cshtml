@@ -9,6 +9,8 @@
 
 
 <form id="modalForm" asp-action="@action" method="post">
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.SaleId)
     <div class="mb-3">
         <label asp-for="ClientId" class="form-label"></label>
         <select asp-for="ClientId" asp-items="ViewBag.Clients"  class="form-select">
