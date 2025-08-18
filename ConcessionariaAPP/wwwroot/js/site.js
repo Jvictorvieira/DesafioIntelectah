@@ -159,11 +159,12 @@ function initCpfMask(){
     var cpfInput = document.getElementById('Cpf');
     if (cpfInput) {
         cpfInput.addEventListener('input', function() {
+            
             let v = cpfInput.value.replace(/\D/g, '');
             if (v.length > 11) v = v.slice(0, 11);
             if (v.length > 9) {
                 // Formato 999.999.999-99
-                v = v.replace(/^(\d{3})(\d{3})(\d{0,2})/, '$1.$2-$3');
+                v = v.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
             } else if (v.length > 6) {
                 // Formato 999.999-99
                 v = v.replace(/^(\d{3})(\d{3})(\d{0,2})/, '$1.$2-$3');
@@ -179,6 +180,7 @@ function initCpfMask(){
 function processModalForm(modal) {
     initCepMask();
     initPhoneMask();
+    initCpfMask();
     var modalForm = document.getElementById('modalForm');
     if (modalForm) {
         modalForm.onsubmit = function (e) {
@@ -197,17 +199,186 @@ function processModalForm(modal) {
                     try {
                         var result = JSON.parse(htmlOrJson);
                         if (result.success) {
-                            debugger
+                            
                             modal.hide();
                             showSuccessToast(result.message);
                             getTableData(result.url);
                         }
                     } catch {
-                        debugger
+                        
                         document.getElementById('entityModalBody').innerHTML = htmlOrJson;
                         processModalForm(modal);
                     }
                 });
         };
     }
+}
+
+
+function LoadSalesByMonthChart() {
+    var data = JSON.parse(document.getElementById('salesPerMonthData').value);
+    var labels = JSON.parse(document.getElementById('salesPerMonthLabels').value);
+    var ctx = document.getElementById('salesPerMonth').getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vendas',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function LoadSalesByVehicleTypeChart() {
+    var data = JSON.parse(document.getElementById('salesPerVehicleTypeData').value);
+    var labels = JSON.parse(document.getElementById('salesPerVehicleTypeLabels').value);
+    var ctx = document.getElementById('salesPerVehicleType').getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vendas',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function LoadSalesPerCarDealershipChart() {
+    var data = JSON.parse(document.getElementById('salesPerCarDealershipData').value);
+    var labels = JSON.parse(document.getElementById('salesPerCarDealershipLabels').value);
+    var ctx = document.getElementById('salesPerCarDealership').getContext('2d');
+   
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vendas',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+
+function LoadSalesPerManufacturerChart() {
+    var data = JSON.parse(document.getElementById('salesPerManufacturerData').value);
+    var labels = JSON.parse(document.getElementById('salesPerManufacturerLabels').value);
+    var ctx = document.getElementById('salesPerManufacturer').getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vendas',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function LoadSalesPerClientChart() {
+    var data = JSON.parse(document.getElementById('salesPerClientData').value);
+    var labels = JSON.parse(document.getElementById('salesPerClientLabels').value);
+    var ctx = document.getElementById('salesPerClient').getContext('2d');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Vendas',
+                data: data,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function ReloadCharts(data) {
+    debugger
+    document.getElementById('dashboard').innerHTML = data;
+    LoadSalesByMonthChart();
+    LoadSalesByVehicleTypeChart();
+    LoadSalesPerCarDealershipChart();
+    LoadSalesPerManufacturerChart();
+    LoadSalesPerClientChart();
+}
+
+function GetChartsData() {
+    var filterForm = document.getElementById('filterForm');
+    if (filterForm) {
+        filterForm.onsubmit = function (e) {
+            debugger
+            e.preventDefault();
+            var formData = new FormData(filterForm);
+            var url = filterForm.action;
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.text())
+                .then(data => {
+                    // Atualiza os gráficos com os novos dados
+                    ReloadCharts(data);
+                })
+                .catch(error => console.error('Erro ao obter dados dos gráficos:', error));
+        }
+    };
 }
