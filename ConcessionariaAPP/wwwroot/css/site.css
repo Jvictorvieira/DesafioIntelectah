@@ -15,10 +15,12 @@ html {
 html {
   position: relative;
   min-height: 100%;
+
 }
 
 body {
   margin-bottom: 60px;
+
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -28,4 +30,13 @@ body {
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
+}
+
+.login-container {
+  height: calc(100vh - 80px);
+}
+
+.login-background{
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f0f0f0, #d9d9d9);
 }
