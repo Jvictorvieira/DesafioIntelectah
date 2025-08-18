@@ -6,6 +6,7 @@ using ConcessionariaAPP.Application.Interfaces;
 using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Application.Dto;
+using ConcessionariaAPP.Application.Excepetions;
 using AutoMapper;
 
 public class SaleAppService : ISaleService
@@ -25,7 +26,8 @@ public class SaleAppService : ISaleService
 
         entity.IsDeleted = false;
 
-        
+        entity.SaleProtocol = GenerateProtocol();
+
 
         var created = await _SaleRepository.CreateAsync(entity);
         return _mapper.Map<SaleDto>(created);
@@ -50,7 +52,7 @@ public class SaleAppService : ISaleService
     {
         if (id <= 0)
         {
-            throw new ArgumentException("Id inválido para exclusão.", nameof(id));
+            throw new AppValidationException().Add(nameof(SaleDto.SaleId), "Id inválido para exclusão.");
         }
         return await _SaleRepository.DeleteAsync(id);
     }
@@ -69,9 +71,21 @@ public class SaleAppService : ISaleService
         }
         if (isUpdate && dto.SaleId <= 0)
         {
-            throw new ArgumentException("Id inválido para atualização.", nameof(dto.SaleId));
+            throw new AppValidationException().Add(nameof(dto.SaleId), "Id inválido para atualização.");
         }
 
+    }
+    
+    private static string GenerateProtocol()
+    {
+
+        var numericString = RemoveNonNumericCharacters(Guid.NewGuid().ToString());
+        return numericString;
+    }
+
+    private static string RemoveNonNumericCharacters(string value)
+    {
+        return new string([.. value.Where(char.IsDigit)])[..20];
     }
     
 

@@ -7,6 +7,7 @@ using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Application.Dto;
 using ConcessionariaAPP.Domain.Entities;
 using AutoMapper;
+using ConcessionariaAPP.Application.Excepetions;
 
 public class VehicleAppService : IVehicleService
 {
@@ -52,7 +53,7 @@ public class VehicleAppService : IVehicleService
         {
             var entity = await _vehicleRepository.GetByIdAsync(dto.VehicleId.Value);
             if (entity.IsDeleted)
-                throw new InvalidOperationException("Veículo está excluído (lógico).");
+                throw new AppValidationException().Add(nameof(dto.VehicleId), "Veículo está excluído (lógico).");
 
             _mapper.Map(dto, entity);
 
@@ -61,7 +62,7 @@ public class VehicleAppService : IVehicleService
         }
         else
         {
-            throw new ArgumentException("O objeto não contém um ID válido para atualização.", nameof(dto.VehicleId));
+            throw new AppValidationException().Add(nameof(dto.VehicleId), "O objeto não contém um ID válido para atualização.");
         }
     }
     
@@ -69,16 +70,16 @@ public class VehicleAppService : IVehicleService
     {
         if (dto is null)
         {
-            throw new ArgumentNullException(nameof(dto));
+            throw new AppValidationException().Add(nameof(dto.VehicleId), "O objeto não pode ser nulo.");
         }
         if (isUpdate && dto.VehicleId <= 0)
         {
-            throw new ArgumentException("Id inválido para atualização.", nameof(dto.VehicleId));
+            throw new AppValidationException().Add(nameof(dto.VehicleId), "Id inválido para atualização.");
         }
 
         if (string.IsNullOrWhiteSpace(dto.Model))
         {
-            throw new ArgumentException("Nome do Modelo é obrigatório.", nameof(dto.Model));
+             throw new AppValidationException().Add(nameof(dto.Model), "Nome do Modelo é obrigatório.");
         }
 
     }

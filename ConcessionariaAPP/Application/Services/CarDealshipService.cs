@@ -7,16 +7,13 @@ using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Application.Dto;
 using AutoMapper;
+using ConcessionariaAPP.Application.Excepetions;
 
-public class CarDealershipAppService : ICarDealershipService
+public class CarDealershipAppService(ICarDealershipRepository CarDealershipRepository, IMapper mapper) : ICarDealershipService
 {
-    private readonly ICarDealershipRepository _CarDealershipRepository;
-    private readonly IMapper _mapper;
-    public CarDealershipAppService(ICarDealershipRepository CarDealershipRepository, IMapper mapper)
-    {
-        _CarDealershipRepository = CarDealershipRepository;
-        _mapper = mapper;
-    }
+    private readonly ICarDealershipRepository _CarDealershipRepository = CarDealershipRepository;
+    private readonly IMapper _mapper = mapper;
+
 
     public async Task<CarDealershipDto> CreateAsync(CarDealershipDto dto)
     {
@@ -26,8 +23,8 @@ public class CarDealershipAppService : ICarDealershipService
         entity.IsDeleted = false;
 
         if (await ExistsByNameAsync(dto.Name))
-        { 
-            throw new InvalidOperationException("O nome do fabricante já está em uso.");
+        {
+            throw new AppValidationException().Add(nameof(CarDealershipDto.Name),"O nome do fabricante já está em uso." );
         }
 
         var created = await _CarDealershipRepository.CreateAsync(entity);
@@ -40,7 +37,7 @@ public class CarDealershipAppService : ICarDealershipService
 
         if (await ExistsByNameAsync(dto.Name, dto.CarDealershipId ?? 0))
         {
-            throw new InvalidOperationException("O nome do fabricante já está em uso.");
+            throw new AppValidationException().Add(nameof(CarDealershipDto.Name),"O nome da concessionária já está em uso.");
         }
 
         var entity = _mapper.Map<CarDealership>(dto);
@@ -58,7 +55,7 @@ public class CarDealershipAppService : ICarDealershipService
     {
         if (id <= 0)
         {
-            throw new ArgumentException("Id inválido para exclusão.", nameof(id));
+            throw new AppValidationException().Add(nameof(CarDealershipDto.CarDealershipId),"Id inválido para exclusão.");
         }
         return await _CarDealershipRepository.DeleteAsync(id);
     }
@@ -73,16 +70,16 @@ public class CarDealershipAppService : ICarDealershipService
     {
         if (dto is null)
         {
-            throw new ArgumentNullException(nameof(dto));
+            throw new AppValidationException().Add(nameof(dto),"Concessionária não existe.");
         }
         if (isUpdate && dto.CarDealershipId <= 0)
         {
-            throw new ArgumentException("Id inválido para atualização.", nameof(dto.CarDealershipId));
+            throw new AppValidationException().Add(nameof(dto.CarDealershipId),"Id inválido para atualização.");
         }
 
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
-            throw new ArgumentException("Nome do Modelo é obrigatório.", nameof(dto.Name));
+            throw new AppValidationException().Add(nameof(dto.Name),"Nome da Concessionária é obrigatório.");
         }
     }
     

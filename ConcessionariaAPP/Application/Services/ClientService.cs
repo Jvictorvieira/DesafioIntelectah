@@ -7,6 +7,7 @@ using ConcessionariaAPP.Domain.Interfaces;
 using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Application.Dto;
 using AutoMapper;
+using ConcessionariaAPP.Application.Excepetions;
 
 public class ClientAppService : IClientService
 {
@@ -25,9 +26,9 @@ public class ClientAppService : IClientService
 
         entity.IsDeleted = false;
 
-        if (await ExistsByNameAsync(dto.Name))
-        { 
-            throw new InvalidOperationException("O nome do fabricante já está em uso.");
+        if (await ExistsByCpfAsync(dto.Cpf))
+        {
+            throw new AppValidationException().Add(nameof(dto.Cpf), "O CPF do cliente já está em uso.");
         }
 
         var created = await _ClientRepository.CreateAsync(entity);
@@ -38,9 +39,9 @@ public class ClientAppService : IClientService
     {
         Validate(dto, isUpdate: true);
 
-        if (await ExistsByNameAsync(dto.Name, dto.ClientId ?? 0))
+        if (await ExistsByCpfAsync(dto.Cpf, dto.ClientId ?? 0))
         {
-            throw new InvalidOperationException("O nome do fabricante já está em uso.");
+            throw new AppValidationException().Add(nameof(dto.Cpf), "O CPF do cliente já está em uso.");
         }
 
         var entity = _mapper.Map<Clients>(dto);
@@ -58,7 +59,7 @@ public class ClientAppService : IClientService
     {
         if (id <= 0)
         {
-            throw new ArgumentException("Id inválido para exclusão.", nameof(id));
+            throw new AppValidationException().Add(nameof(ClientDto.ClientId),"Id inválido para exclusão.");
         }
         return await _ClientRepository.DeleteAsync(id);
     }
@@ -73,24 +74,24 @@ public class ClientAppService : IClientService
     {
         if (dto is null)
         {
-            throw new ArgumentNullException(nameof(dto));
+            throw new AppValidationException().Add(nameof(dto),"Cliente não existe.");
         }
         if (isUpdate && dto.ClientId <= 0)
         {
-            throw new ArgumentException("Id inválido para atualização.", nameof(dto.ClientId));
+            throw new AppValidationException().Add(nameof(dto.ClientId),"Id inválido para atualização.");
         }
 
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
-            throw new ArgumentException("Nome do Modelo é obrigatório.", nameof(dto.Name));
+            throw new AppValidationException().Add(nameof(dto.Name),"Nome do Cliente é obrigatório.");
         }
     }
     
-    public async Task<bool> ExistsByNameAsync(string name, int id = 0)
+    public async Task<bool> ExistsByCpfAsync(string cpf, int id = 0)
         {
             try
             {
-                var Client = await _ClientRepository.GetByNameAsync(name.Trim());
+                var Client = await _ClientRepository.GetByCpfAsync(cpf.Trim());
                 if (Client != null && Client.ClientId == id)
                 {
                     return false;       
