@@ -30,9 +30,11 @@ public class ClientAppService : IClientService
         {
             throw new AppValidationException().Add(nameof(dto.Cpf), "O CPF do cliente já está em uso.");
         }
-
+        entity.Cpf = removeMask(entity.Cpf);
         var created = await _ClientRepository.CreateAsync(entity);
-        return _mapper.Map<ClientDto>(created);
+        var mapped = _mapper.Map<ClientDto>(created);
+        mapped.Cpf = formatCpf(mapped.Cpf);
+        return mapped;
     }
 
     public async Task<ClientDto> UpdateAsync(ClientDto dto)
@@ -45,8 +47,11 @@ public class ClientAppService : IClientService
         }
 
         var entity = _mapper.Map<Clients>(dto);
+        entity.Cpf = removeMask(entity.Cpf);
         var updated = await _ClientRepository.UpdateAsync(entity);
-        return _mapper.Map<ClientDto>(updated);
+        var mapped = _mapper.Map<ClientDto>(updated);
+        mapped.Cpf = formatCpf(mapped.Cpf);
+        return mapped;
     }
 
     public async Task<ClientDto> GetByIdAsync(int id)
@@ -59,7 +64,7 @@ public class ClientAppService : IClientService
     {
         if (id <= 0)
         {
-            throw new AppValidationException().Add(nameof(ClientDto.ClientId),"Id inválido para exclusão.");
+            throw new AppValidationException().Add(nameof(ClientDto.ClientId), "Id inválido para exclusão.");
         }
         return await _ClientRepository.DeleteAsync(id);
     }
@@ -67,41 +72,54 @@ public class ClientAppService : IClientService
     public async Task<IEnumerable<ClientDto>> GetAllAsync()
     {
         var list = await _ClientRepository.GetAllAsync();
-        return [.. list.Select(e => _mapper.Map<ClientDto>(e))];
+        var mapped = list.Select(e => _mapper.Map<ClientDto>(e)).ToList();
+        mapped.ForEach(e => e.Cpf = formatCpf(e.Cpf));
+        return mapped;
     }
 
     private static void Validate(ClientDto dto, bool isUpdate)
     {
         if (dto is null)
         {
-            throw new AppValidationException().Add(nameof(dto),"Cliente não existe.");
+            throw new AppValidationException().Add(nameof(dto), "Cliente não existe.");
         }
         if (isUpdate && dto.ClientId <= 0)
         {
-            throw new AppValidationException().Add(nameof(dto.ClientId),"Id inválido para atualização.");
+            throw new AppValidationException().Add(nameof(dto.ClientId), "Id inválido para atualização.");
         }
 
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
-            throw new AppValidationException().Add(nameof(dto.Name),"Nome do Cliente é obrigatório.");
+            throw new AppValidationException().Add(nameof(dto.Name), "Nome do Cliente é obrigatório.");
         }
     }
-    
+
     public async Task<bool> ExistsByCpfAsync(string cpf, int id = 0)
+    {
+        try
         {
-            try
-            {
-                var Client = await _ClientRepository.GetByCpfAsync(cpf.Trim());
-                if (Client != null && Client.ClientId == id)
-                {
-                    return false;       
-                }
-                return true;
-            }
-            catch (KeyNotFoundException)
+            var Client = await _ClientRepository.GetByCpfAsync(cpf.Trim());
+            if (Client != null && Client.ClientId == id)
             {
                 return false;
             }
+            return true;
         }
+        catch (KeyNotFoundException)
+        {
+            return false;
+        }
+    }
 
+    private string removeMask(string value)
+    {
+        return value.Replace(".", "").Replace("-", "").Replace(" ", "");
+    }
+
+    private string formatCpf(string value)
+    {
+        value = removeMask(value);
+        if (value.Length != 11) return value;
+        return $"{value.Substring(0, 3)}.{value.Substring(3, 3)}.{value.Substring(6, 3)}-{value.Substring(9, 2)}";
+    }
 }
