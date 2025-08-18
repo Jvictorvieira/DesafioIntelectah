@@ -9,7 +9,8 @@
 
 
 <form id="modalForm" asp-action="@action" method="post">
-    
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.CarDealershipId)
     <div class="form-group">
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
@@ -18,7 +19,7 @@
 
     <div class="form-group">
         <label asp-for="AddressCode"></label>
-        <input asp-for="AddressCode" class="form-control" id="cepInput" maxlength="10"/>
+        <input asp-for="AddressCode" class="form-control" maxlength="10"/>
         <span asp-validation-for="AddressCode" class="text-danger"></span>
     </div>
     <div class="form-group">

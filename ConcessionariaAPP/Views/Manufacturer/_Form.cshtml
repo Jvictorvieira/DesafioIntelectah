@@ -9,6 +9,7 @@
 
 <form id="modalForm" asp-action="@action" method="post">
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.ManufacturerId)
     <input type="hidden" asp-for="ManufacturerId" />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="mb-3">
