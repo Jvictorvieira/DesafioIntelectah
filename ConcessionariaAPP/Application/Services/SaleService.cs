@@ -63,8 +63,18 @@ public class SaleAppService(ISaleRepository SaleRepository, IVehicleRepository V
 
     public async Task<IEnumerable<SaleDto>> GetAll()
     {
-        var list = await _SaleRepository.GetAll().ToListAsync();
-        return [.. list.Select(e => _mapper.Map<SaleDto>(e))];
+        var list = await _SaleRepository.GetAll().Select(s => new SaleDto()
+        {
+            SaleId = s.SaleId,
+            SaleDate = s.SaleDate,
+            SalePrice = s.SalePrice,
+            ClientId = s.ClientId,
+            VehicleId = s.VehicleId,
+            VehicleModel = s.Vehicle.Model,
+            ClientName = s.Client.Name,
+            CarDealershipName = s.CarDealership.Name,
+            SaleProtocol = s.SaleProtocol}).ToListAsync();
+        return list;
     }
 
     private static void Validate(SaleDto dto, bool isUpdate)

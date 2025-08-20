@@ -38,8 +38,15 @@ public class VehicleAppService : IVehicleService
 
     public async Task<IEnumerable<VehicleDto>> GetAll()
     {
-        var list = await _vehicleRepository.GetAll().ToListAsync();
-        return [.. list.Select(e => _mapper.Map<VehicleDto>(e))];
+        var list = await _vehicleRepository.GetAll().Select(v =>new VehicleDto
+        {
+            VehicleId = v.VehicleId,
+            Model = v.Model,
+            ManufacturerName = v.Manufacturer.Name,
+            ManufacturingYear = v.ManufacturingYear,
+            Price = v.Price
+        }).ToListAsync();
+        return list;
     }
 
     public async Task<VehicleDto> GetByIdAsync(int id)
