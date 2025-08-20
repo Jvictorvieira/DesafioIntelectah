@@ -1,7 +1,7 @@
 @using ConcessionariaAPP.Models.CarDealershipViewModel
 @model CarDealershipTableViewModel
 
-<div itemid="data-table">
+<div id="data-table">
     @if (Model.Rows.Count == 0)
     {
         <div class="alert alert-info" role="alert">
@@ -11,7 +11,7 @@
     else
     {
         
-        <table class="table table-striped table-bordered">
+        <table class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
                     @foreach (var column in Model.Columns)
