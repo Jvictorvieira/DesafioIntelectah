@@ -8,6 +8,8 @@ public class ClientsConfiguration : IEntityTypeConfiguration<Clients>
     {
         builder.ToTable("Clients");
         builder.HasKey(c => c.ClientId);
+        builder.Property(c => c.ClientId)
+            .UseIdentityColumn();
         builder.Property(c => c.Name)
             .IsRequired()
             .HasMaxLength(100);

@@ -25,7 +25,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
     public async Task<IActionResult> IndexAsync()
     {
         var model = new ManufacturerTableViewModel();
-        var Manufacturers = await _ManufacturerService.GetAllAsync();
+        var Manufacturers = await _ManufacturerService.GetAll();
         model.Rows = _mapper.Map<List<ManufacturerViewModel>>(Manufacturers);
         return View(model);
     }
@@ -136,7 +136,7 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
     public async Task<IActionResult> GetTableData()
     {
         var model = new ManufacturerTableViewModel();
-        var manufacturers = await _ManufacturerService.GetAllAsync();
+        var manufacturers = await _ManufacturerService.GetAll();
         if (manufacturers != null)
         {
             model.Rows = _mapper.Map<List<ManufacturerViewModel>>(manufacturers);

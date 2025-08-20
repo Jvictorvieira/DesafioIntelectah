@@ -1,5 +1,10 @@
 @using ConcessionariaAPP.Models.HomeViewModel;
-@model HomeFilterViewModel
+@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var data = Model;
+}
 
 <div class="row" id="dashboardCharts">
     @Html.Hidden("salesPerMonthData", Json.Serialize(Model.SalesPerMonth.Data))

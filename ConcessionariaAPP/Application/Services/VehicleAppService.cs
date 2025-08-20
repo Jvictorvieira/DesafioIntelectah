@@ -8,6 +8,7 @@ using ConcessionariaAPP.Application.Dto;
 using ConcessionariaAPP.Domain.Entities;
 using AutoMapper;
 using ConcessionariaAPP.Application.Excepetions;
+using Microsoft.EntityFrameworkCore;
 
 public class VehicleAppService : IVehicleService
 {
@@ -25,25 +26,25 @@ public class VehicleAppService : IVehicleService
         var entity = _mapper.Map<Vehicles>(dto);
         entity.IsDeleted = false; 
 
-        var created = await _vehicleRepository.CreateAsync(entity);
+        var created = await _vehicleRepository.Create(entity);
         return _mapper.Map<VehicleDto>(created);
     }
 
     
     public async Task<bool> DeleteAsync(int id)
     {
-        return await _vehicleRepository.DeleteAsync(id);
+        return await _vehicleRepository.Delete(id);
     }
 
-    public async Task<IEnumerable<VehicleDto>> GetAllAsync()
+    public async Task<IEnumerable<VehicleDto>> GetAll()
     {
-        var list = await _vehicleRepository.GetAllAsync();
+        var list = await _vehicleRepository.GetAll().ToListAsync();
         return [.. list.Select(e => _mapper.Map<VehicleDto>(e))];
     }
 
     public async Task<VehicleDto> GetByIdAsync(int id)
     {
-        var entity = await _vehicleRepository.GetByIdAsync(id);
+        var entity = await _vehicleRepository.GetById(id);
         return _mapper.Map<VehicleDto>(entity);
     }
     public async Task<VehicleDto> UpdateAsync(VehicleDto dto)
@@ -51,18 +52,18 @@ public class VehicleAppService : IVehicleService
         Validate(dto, isUpdate: true);
         if (dto.VehicleId.HasValue)
         {
-            var entity = await _vehicleRepository.GetByIdAsync(dto.VehicleId.Value);
+            var entity = await _vehicleRepository.GetById(dto.VehicleId.Value);
             if (entity.IsDeleted)
-                throw new AppValidationException().Add(nameof(dto.VehicleId), "Veículo está excluído (lógico).");
+                throw new AppValidationException(nameof(dto.VehicleId), "Veículo está excluído (lógico).");
 
             _mapper.Map(dto, entity);
 
-            var updated = await _vehicleRepository.UpdateAsync(entity);
+            var updated = await _vehicleRepository.Update(entity);
             return _mapper.Map<VehicleDto>(updated);
         }
         else
         {
-            throw new AppValidationException().Add(nameof(dto.VehicleId), "O objeto não contém um ID válido para atualização.");
+            throw new AppValidationException(nameof(dto.VehicleId), "O objeto não contém um ID válido para atualização.");
         }
     }
     
@@ -70,16 +71,16 @@ public class VehicleAppService : IVehicleService
     {
         if (dto is null)
         {
-            throw new AppValidationException().Add(nameof(dto.VehicleId), "O objeto não pode ser nulo.");
+            throw new AppValidationException(nameof(dto.VehicleId), "O objeto não pode ser nulo.");
         }
         if (isUpdate && dto.VehicleId <= 0)
         {
-            throw new AppValidationException().Add(nameof(dto.VehicleId), "Id inválido para atualização.");
+            throw new AppValidationException(nameof(dto.VehicleId), "Id inválido para atualização.");
         }
 
         if (string.IsNullOrWhiteSpace(dto.Model))
         {
-             throw new AppValidationException().Add(nameof(dto.Model), "Nome do Modelo é obrigatório.");
+             throw new AppValidationException(nameof(dto.Model), "Nome do Modelo é obrigatório.");
         }
 
     }

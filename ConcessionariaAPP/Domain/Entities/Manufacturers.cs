@@ -8,10 +8,10 @@ public class Manufacturers : BaseEntity
     public int ManufacturerId { get; set; }
 
     [MaxLength(100)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [MaxLength(50)]
-    public string Country { get; set; }
+    public required string Country { get; set; }
 
     public int FundationYear { get; set; }
 
@@ -28,4 +28,5 @@ public class Manufacturers : BaseEntity
         FundationYear = fundationYear;
         WebSite = webSite;
     }
+    public Manufacturers() { }
 }

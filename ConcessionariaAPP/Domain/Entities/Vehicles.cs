@@ -10,10 +10,10 @@ public class Vehicles : BaseEntity
     public int VehicleId { get; set; }
 
     [MaxLength(100)]
-    public string Model { get; set; }
+    public required string Model { get; set; }
 
     public int ManufacturingYear { get; set; }
-    
+
     [Column(TypeName = "decimal(10,2)")]
     public decimal Price { get; set; }
 
@@ -37,5 +37,7 @@ public class Vehicles : BaseEntity
         Description = description;
         VehicleType = vehicleType;
     }
+    
+    public Vehicles() {}
 
 }

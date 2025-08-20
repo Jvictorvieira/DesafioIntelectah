@@ -8,27 +8,26 @@ public class CarDealership : BaseEntity
     public int CarDealershipId { get; set; }
 
     [MaxLength(100)]
-
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [MaxLength(255)]
-    public string Address { get; set; }
+    public required string Address { get; set; }
 
     [MaxLength(50)]
-    public string City { get; set; }
+    public required string City { get; set; }
 
     [MaxLength(50)]
     [Display(Name = "Estado")]
-    public string State { get; set; }
+    public required string State { get; set; }
 
     [MaxLength(10)]
-    public string AddressCode { get; set; }
+    public required string AddressCode { get; set; }
 
     [MaxLength(15)]
-    public string Phone { get; set; }
+    public required string Phone { get; set; }
 
     [MaxLength(100)]
-    public string Email { get; set; }
+    public required string Email { get; set; }
 
     public int MaxVehicleCapacity { get; set; }
 
@@ -46,4 +45,6 @@ public class CarDealership : BaseEntity
         Email = email;
         MaxVehicleCapacity = maxVehicleCapacity;
     }
+
+    public CarDealership() { }
 }

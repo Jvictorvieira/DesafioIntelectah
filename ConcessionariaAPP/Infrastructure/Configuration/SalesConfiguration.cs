@@ -8,6 +8,8 @@ public class SalesConfiguration : IEntityTypeConfiguration<Sales>
     {
         builder.ToTable("Sales");
         builder.HasKey(s => s.SaleId);
+        builder.Property(s => s.SaleId)
+            .UseIdentityColumn();
         builder.Property(s => s.SaleDate)
             .IsRequired();
         builder.Property(s => s.SalePrice)

@@ -11,12 +11,9 @@ public class BaseController : Controller
 {
     protected void HandleException(AppValidationException ex)
     {
-        foreach (var (field, messages) in ex.Errors)
-        {
-            var key = field;
-            foreach (var msg in messages)
-                this.ModelState.AddModelError(key, msg);
-        }
+        var dataField = ex.Data["Field"] as string;
+        var errorMessage = ex.Data["ErrorMessage"] as string;
+        this.ModelState.AddModelError(dataField ?? string.Empty, errorMessage ?? ex.Message);
     }
     
     protected string GetDisplayName(Enum value)

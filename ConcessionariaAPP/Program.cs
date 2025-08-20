@@ -12,18 +12,25 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    if (builder.Configuration.GetValue("RUN_DEMO_SEED", true))
+    { 
+        await DemoDataSeeder.SeedAsync(app.Services, new DemoSeedOptions
+        {
+            Manufacturers = 8,
+            VehiclesPerManufacturer = 8,
+            CarDealerships = 5,
+            Clients = 600,
+            MonthsBack = 18,
+            AvgSalesPerMonth = 250
+        });
+     }
+
     app.UseSwagger();
     app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = "swagger"; // Set Swagger UI at the app's root
     });
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    dbContext.Database.Migrate();
 }
 
 // Configure the HTTP request pipeline.

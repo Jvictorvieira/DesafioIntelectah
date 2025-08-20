@@ -8,14 +8,14 @@ public class Clients : BaseEntity
     public int ClientId { get; set; }
 
     [MaxLength(100)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     [MaxLength(11)]
-    public string Cpf { get; set; }
+    public required string Cpf { get; set; }
 
     [MaxLength(15)]
     [Display(Name = "Telefone")]
-    public string Phone { get; set; }
+    public required string Phone { get; set; }
 
     public List<Sales> Sales { get; set; } = [];
 
@@ -26,4 +26,6 @@ public class Clients : BaseEntity
         Cpf = cpf;
         Phone = phone;
     }
+
+    public Clients() { }
 }

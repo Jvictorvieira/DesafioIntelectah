@@ -25,7 +25,7 @@ public class ClientController(IClientService ClientService, IMapper mapper) : Ba
     public async Task<IActionResult> IndexAsync()
     {
         var model = new ClientTableViewModel();
-        var Clients = await _ClientService.GetAllAsync();
+        var Clients = await _ClientService.GetAll();
         model.Rows = _mapper.Map<List<ClientViewModel>>(Clients);
         return View(model);
     }
@@ -128,7 +128,7 @@ public class ClientController(IClientService ClientService, IMapper mapper) : Ba
     public async Task<IActionResult> GetTableData()
     {
         var model = new ClientTableViewModel();
-        var Clients = await _ClientService.GetAllAsync();
+        var Clients = await _ClientService.GetAll();
         if (Clients != null)
         {
             model.Rows = _mapper.Map<List<ClientViewModel>>(Clients);

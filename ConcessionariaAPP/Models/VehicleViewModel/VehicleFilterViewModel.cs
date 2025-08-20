@@ -1,6 +1,6 @@
 namespace ConcessionariaAPP.Models.VehicleViewModel;
 
-public class VehicleFilterViewModel: BaseViewModel
+public class VehicleFilterViewModel: FilterViewModel
 {
 
 } 

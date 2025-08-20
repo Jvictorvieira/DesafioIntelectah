@@ -9,6 +9,8 @@ public class CarDealershipsConfiguration : IEntityTypeConfiguration<CarDealershi
     {
         builder.ToTable("CarDealerships");
         builder.HasKey(cd => cd.CarDealershipId);
+        builder.Property(cd => cd.CarDealershipId)
+            .UseIdentityColumn();
 
         builder.Property(cd => cd.Name)
             .IsRequired()

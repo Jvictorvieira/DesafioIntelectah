@@ -8,6 +8,9 @@ public class VehiclesConfiguration : IEntityTypeConfiguration<Vehicles>
     {
         builder.ToTable("Vehicles");
         builder.HasKey(v => v.VehicleId);
+        builder.Property(v => v.VehicleId)
+            .UseIdentityColumn();
+
         builder.Property(v => v.Model)
             .IsRequired()
             .HasMaxLength(100);

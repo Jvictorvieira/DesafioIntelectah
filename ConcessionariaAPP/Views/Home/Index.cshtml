@@ -1,5 +1,5 @@
 ﻿@using ConcessionariaAPP.Models.HomeViewModel;
-@model HomeFilterViewModel
+@model HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
     
@@ -12,35 +12,35 @@
         <div class="row d-flex align-items-end flex-wrap">
             <div class="form-group col-md-2">
                 <label for="CarDealershipId">Concessionária</label>
-                <select asp-for="CarDealershipId" class="form-control" asp-items="@ViewBag.CarDealerships">
+                <select asp-for="filter.CarDealershipId" class="form-control" asp-items="@ViewBag.CarDealerships">
                     <option value="">Selecione</option>
                 </select>
             </div>
             <div class="form-group col-md-2 ">
                 <label for="VehicleTypeId">Veículo</label>
-                <select asp-for="VehicleTypeId" class="form-control" asp-items="@ViewBag.VehicleTypes">
+                <select asp-for="filter.VehicleTypeId" class="form-control" asp-items="@ViewBag.VehicleTypes">
                     <option value="">Selecione</option>
                 </select>
             </div>
             <div class="form-group col-md-2 ">
                 <label for="ClientId">Cliente</label>
-                <select asp-for="ClientId" class="form-control" asp-items="@ViewBag.Clients">
+                <select asp-for="filter.ClientId" class="form-control" asp-items="@ViewBag.Clients">
                     <option value="">Selecione</option>
                 </select>
             </div>
             <div class="form-group col-md-2 ">
                 <label for="ManufacturerId">Fabricante</label>
-                <select asp-for="ManufacturerId" class="form-control" asp-items="@ViewBag.Manufacturers">
+                <select asp-for="filter.ManufacturerId" class="form-control" asp-items="@ViewBag.Manufacturers">
                     <option value="">Selecione</option>
                 </select>
             </div>
             <div class="form-group col-md-2 ">
                 <label for="StartDate">De</label>
-                <input type="date" asp-for="StartDate" class="form-control" />
+                <input type="date" asp-for="filter.StartDate" class="form-control" />
             </div>
             <div class="form-group col-md-2 ">
                 <label for="EndDate">Até</label>
-                <input type="date" asp-for="EndDate" class="form-control" />
+                <input type="date" asp-for="filter.EndDate" class="form-control" />
             </div>
             <div class="form-group pt-2 col-md-2">
                 <button type="submit" class="btn btn-primary" >Filtrar</button>

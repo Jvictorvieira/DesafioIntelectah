@@ -8,6 +8,8 @@ public class ManufacturersConfiguration : IEntityTypeConfiguration<Manufacturers
     {
         builder.ToTable("Manufacturers");
         builder.HasKey(m => m.ManufacturerId);
+        builder.Property(m => m.ManufacturerId)
+            .UseIdentityColumn();
         builder.Property(m => m.Name)
             .IsRequired()
             .HasMaxLength(100);

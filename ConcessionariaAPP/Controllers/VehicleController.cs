@@ -151,7 +151,7 @@ public class VehicleController(IVehicleService vehicleService, IManufacturerServ
 
     private async Task LoadSelects(int? manufacturerId = null, int? vehicleTypeId = null)
     {
-        var manufacturers = await _manufacturerService.GetAllAsync();
+        var manufacturers = await _manufacturerService.GetAll();
         ViewBag.Manufacturers = new SelectList(manufacturers, "ManufacturerId", "Name", manufacturerId);
         ViewBag.VehicleTypes = new SelectList(Enum.GetValues(typeof(VehiclesTypes)).Cast<VehiclesTypes>().Select(v => new
         {
@@ -163,7 +163,7 @@ public class VehicleController(IVehicleService vehicleService, IManufacturerServ
 
     private async Task LoadTable(VehicleTableViewModel model)
     {
-        var vehicles = await _vehicleService.GetAllAsync();
+        var vehicles = await _vehicleService.GetAll();
 
         var rows = _mapper.Map<List<VehicleViewModel>>(vehicles);
         foreach (var row in rows)

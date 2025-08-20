@@ -35,7 +35,7 @@ public class SaleController(ISaleService SaleService,
     public async Task<IActionResult> IndexAsync()
     {
         var model = new SaleTableViewModel();
-        var Sales = await _saleService.GetAllAsync();
+        var Sales = await _saleService.GetAll();
         model.Rows = _mapper.Map<List<SaleViewModel>>(Sales);
         return View(model);
     }
@@ -143,7 +143,7 @@ public class SaleController(ISaleService SaleService,
     public async Task<IActionResult> GetTableData()
     {
         var model = new SaleTableViewModel();
-        var Sales = await _saleService.GetAllAsync();
+        var Sales = await _saleService.GetAll();
         if (Sales != null)
         {
             model.Rows = _mapper.Map<List<SaleViewModel>>(Sales);
@@ -154,10 +154,10 @@ public class SaleController(ISaleService SaleService,
     private async Task LoadSelectsAsync(int? clientId = null, int? vehicleId = null, int? carDealershipId = null)
     {
 
-        var clients = await _clientService.GetAllAsync();
+        var clients = await _clientService.GetAll();
         ViewBag.Clients = new SelectList(clients, "ClientId", "Name", clientId);
 
-        var vehicles = await _vehicleService.GetAllAsync();
+        var vehicles = await _vehicleService.GetAll();
 
         // Cria lista de veículos agrupados
         var vehicleSelectList = vehicles.Select(v => new SelectListItem
@@ -170,7 +170,7 @@ public class SaleController(ISaleService SaleService,
 
         ViewBag.Vehicles = vehicleSelectList;
 
-        var carDealerships = await _carDealershipService.GetAllAsync();
+        var carDealerships = await _carDealershipService.GetAll();
         ViewBag.CarDealerships = new SelectList(carDealerships, "CarDealershipId", "Name", carDealershipId);
 
     }

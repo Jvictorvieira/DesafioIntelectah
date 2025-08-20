@@ -105,6 +105,13 @@ public class AccountController : Controller
         return View(model);
     }
 
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
+
     private void LoadSelects()
     {
         ViewBag.AccessLevels = new SelectList(Enum.GetValues(typeof(AccessLevel)).Cast<AccessLevel>().Select(v => new

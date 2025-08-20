@@ -27,9 +27,9 @@ public class HomeController(
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var viewModel = new HomeFilterViewModel();
-        await LoadDashboardData(viewModel);
-        await LoadDependencies(viewModel);
+        var viewModel = new HomeViewModel();
+        LoadDashboardData(viewModel);
+        await LoadDependencies((HomeFilterViewModel)viewModel.filter);
         return View(viewModel);
     }
     [HttpGet]
@@ -39,9 +39,9 @@ public class HomeController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> Filter(HomeFilterViewModel viewModel)
+    public IActionResult Filter(HomeViewModel viewModel)
     {
-        var filteredViewModel = await LoadDashboardData(viewModel);
+        var filteredViewModel = LoadDashboardData(viewModel);
 
         return PartialView("_Dashboard", filteredViewModel);
     }
@@ -52,27 +52,18 @@ public class HomeController(
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    private async Task<HomeFilterViewModel> LoadDashboardData(HomeFilterViewModel viewModel)
+    private  HomeViewModel LoadDashboardData(HomeViewModel viewModel)
     {
-        var salesByCarDealership = await _saleService.GetSalesByCarDealershipAsync(viewModel.CarDealershipId);
-        var salesByVehicleType = await _saleService.GetSalesByVehicleTypeAsync((VehiclesTypes)viewModel.VehicleTypeId);
-        var salesByClient = await _saleService.GetSalesByClientAsync(viewModel.ClientId);
-        var salesByManufacturer = await _saleService.GetSalesByManufacturerAsync(viewModel.ManufacturerId);
-        var salesByMonth = await _saleService.GetSalesByMonthAsync(DateTime.Now.Year);
+        var homeViewModel = new HomeViewModel();
 
-        // Map the data to the view model
-        viewModel.SalesPerCarDealership = salesByCarDealership;
-        viewModel.SalesPerVehicleType = salesByVehicleType;
-        viewModel.SalesPerClient = salesByClient;
-        viewModel.SalesPerManufacturer = salesByManufacturer;
-        viewModel.SalesPerMonth = salesByMonth;
+        homeViewModel = _saleService.LoadCharts(homeViewModel);
 
-        return viewModel;
+        return homeViewModel;
     }
 
     private async Task LoadDependencies(HomeFilterViewModel viewModel)
     {
-        var clients = await _clientService.GetAllAsync();
+        var clients = await _clientService.GetAll();
         ViewBag.Clients = new SelectList(clients, "ClientId", "Name", viewModel.ClientId);
 
         ViewBag.VehicleTypes = new SelectList(Enum.GetValues(typeof(VehiclesTypes)).Cast<VehiclesTypes>().Select(v => new
@@ -81,10 +72,10 @@ public class HomeController(
             Text = GetDisplayName(v)
         }), "Value", "Text", viewModel.VehicleTypeId);
 
-        var carDealerships = await _carDealershipService.GetAllAsync();
+        var carDealerships = await _carDealershipService.GetAll();
         ViewBag.CarDealerships = new SelectList(carDealerships, "CarDealershipId", "Name", viewModel.CarDealershipId);
 
-        var manufacturers = await _manufacturerService.GetAllAsync();
+        var manufacturers = await _manufacturerService.GetAll();
         ViewBag.Manufacturers = new SelectList(manufacturers, "ManufacturerId", "Name", viewModel.ManufacturerId);
     }
 

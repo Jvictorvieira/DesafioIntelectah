@@ -8,6 +8,7 @@ using ConcessionariaAPP.Domain.Entities;
 using ConcessionariaAPP.Application.Dto;
 using AutoMapper;
 using ConcessionariaAPP.Application.Excepetions;
+using Microsoft.EntityFrameworkCore;
 
 public class ManufacturerAppService : IManufacturerService
 {
@@ -28,10 +29,10 @@ public class ManufacturerAppService : IManufacturerService
 
         if (await ExistsByNameAsync(dto.Name))
         {
-            throw new AppValidationException().Add(nameof(dto.Name), "O nome do fabricante já está em uso.");
+            throw new AppValidationException(nameof(dto.Name), "O nome do fabricante já está em uso.");
         }
 
-        var created = await _ManufacturerRepository.CreateAsync(entity);
+        var created = await _ManufacturerRepository.Create(entity);
         return _mapper.Map<ManufacturerDto>(created);
     }
 
@@ -41,17 +42,17 @@ public class ManufacturerAppService : IManufacturerService
 
         if (await ExistsByNameAsync(dto.Name, dto.ManufacturerId ?? 0))
         {
-            throw new AppValidationException().Add(nameof(dto.Name), "O nome do fabricante já está em uso.");
+            throw new AppValidationException(nameof(dto.Name), "O nome do fabricante já está em uso.");
         }
 
         var entity = _mapper.Map<Manufacturers>(dto);
-        var updated = await _ManufacturerRepository.UpdateAsync(entity);
+        var updated = await _ManufacturerRepository.Update(entity);
         return _mapper.Map<ManufacturerDto>(updated);
     }
 
     public async Task<ManufacturerDto> GetByIdAsync(int id)
     {
-        var entity = await _ManufacturerRepository.GetByIdAsync(id);
+        var entity = await _ManufacturerRepository.GetById(id);
         return _mapper.Map<ManufacturerDto>(entity);
     }
 
@@ -59,14 +60,14 @@ public class ManufacturerAppService : IManufacturerService
     {
         if (id <= 0)
         {
-            throw new AppValidationException().Add(nameof(ManufacturerDto.ManufacturerId), "Id inválido para exclusão.");
+            throw new AppValidationException(nameof(ManufacturerDto.ManufacturerId), "Id inválido para exclusão.");
         }
-        return await _ManufacturerRepository.DeleteAsync(id);
+        return await _ManufacturerRepository.Delete(id);
     }
 
-    public async Task<IEnumerable<ManufacturerDto>> GetAllAsync()
+    public async Task<IEnumerable<ManufacturerDto>> GetAll()
     {
-        var list = await _ManufacturerRepository.GetAllAsync();
+        var list = await _ManufacturerRepository.GetAll().ToListAsync();
         return [.. list.Select(e => _mapper.Map<ManufacturerDto>(e))];
     }
 
@@ -74,16 +75,16 @@ public class ManufacturerAppService : IManufacturerService
     {
         if (dto is null)
         {
-            throw new AppValidationException().Add(nameof(ManufacturerDto.ManufacturerId), "O fabricante não existe,");
+            throw new AppValidationException(nameof(ManufacturerDto.ManufacturerId), "O fabricante não existe,");
         }
         if (isUpdate && dto.ManufacturerId <= 0)
         {
-            throw new AppValidationException().Add(nameof(ManufacturerDto.ManufacturerId), "Id inválido para atualização.");
+            throw new AppValidationException(nameof(ManufacturerDto.ManufacturerId), "Id inválido para atualização.");
         }
 
         if (string.IsNullOrWhiteSpace(dto.Name))
         {
-            throw new AppValidationException().Add(nameof(dto.Name), "Nome do Fabricante é obrigatório.");
+            throw new AppValidationException(nameof(dto.Name), "Nome do Fabricante é obrigatório.");
         }
     }
     

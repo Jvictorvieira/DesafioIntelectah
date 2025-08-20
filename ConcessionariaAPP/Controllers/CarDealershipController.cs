@@ -25,7 +25,7 @@ public class CarDealershipController(ICarDealershipService CarDealershipService,
     public async Task<IActionResult> IndexAsync()
     {
         var model = new CarDealershipTableViewModel();
-        var CarDealerships = await _CarDealershipService.GetAllAsync();
+        var CarDealerships = await _CarDealershipService.GetAll();
         model.Rows = _mapper.Map<List<CarDealershipViewModel>>(CarDealerships);
         return View(model);
     }
@@ -128,7 +128,7 @@ public class CarDealershipController(ICarDealershipService CarDealershipService,
     public async Task<IActionResult> GetTableData()
     {
         var model = new CarDealershipTableViewModel();
-        var CarDealerships = await _CarDealershipService.GetAllAsync();
+        var CarDealerships = await _CarDealershipService.GetAll();
         if (CarDealerships != null)
         {
             model.Rows = _mapper.Map<List<CarDealershipViewModel>>(CarDealerships);
