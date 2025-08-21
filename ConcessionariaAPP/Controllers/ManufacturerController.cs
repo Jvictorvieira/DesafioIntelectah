@@ -121,12 +121,11 @@ public class ManufacturerController(IManufacturerService ManufacturerService, IM
         try
         {
             await _ManufacturerService.DeleteAsync(id);
-            return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
+            return Json(new { success = true, message = "Fabricante excluído com sucesso!", url = Url.Action("GetTableData", "Manufacturer") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_FormDelete", new ManufacturerViewModel { ManufacturerId = id });
         }
     }

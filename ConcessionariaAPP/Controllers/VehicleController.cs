@@ -136,17 +136,16 @@ public class VehicleController(IVehicleService vehicleService, IManufacturerServ
     [HttpPost]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var result = await _vehicleService.DeleteAsync(id);
-        if (result)
+        try
         {
-            return Json(new
-            {
-                success = true,
-                message = "Veículo excluído com sucesso!",
-                url = Url.Action("GetTableData", "Vehicle")
-            });
+            await _vehicleService.DeleteAsync(id);
+            return Json(new { success = true, message = "Veículo excluído com sucesso!", url = Url.Action("GetTableData", "Vehicle") });
         }
-        return Json(new { success = false, message = "Erro ao excluir veículo." });
+        catch (AppValidationException ex)
+        {
+            HandleException(ex);
+            return PartialView("_FormDelete", new VehicleViewModel { VehicleId = id });
+        }
     }
 
     private async Task LoadSelects(int? manufacturerId = null, int? vehicleTypeId = null)

@@ -129,12 +129,11 @@ public class SaleController(ISaleService SaleService,
         try
         {
             await _saleService.DeleteAsync(id);
-            return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "Sale") });
+            return Json(new { success = true, message = "Venda excluída com sucesso!", url = Url.Action("GetTableData", "Sale") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_FormDelete", new SaleViewModel { SaleId = id });
         }
     }

@@ -45,10 +45,9 @@ public class CarDealershipController(ICarDealershipService CarDealershipService,
             await _CarDealershipService.CreateAsync(dto);
             return Json(new { success = true, message = "Cadastro realizado com sucesso!", url = Url.Action("GetTableData", "CarDealership") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_Form", model);
         }
     }
@@ -114,7 +113,7 @@ public class CarDealershipController(ICarDealershipService CarDealershipService,
         try
         {
             await _CarDealershipService.DeleteAsync(id);
-            return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "CarDealership") });
+            return Json(new { success = true, message = "Concessionária excluída com sucesso!", url = Url.Action("GetTableData", "CarDealership") });
         }
         catch (AppValidationException ex)
         {

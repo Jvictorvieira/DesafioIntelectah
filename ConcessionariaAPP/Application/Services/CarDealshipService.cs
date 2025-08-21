@@ -24,7 +24,7 @@ public class CarDealershipAppService(ICarDealershipRepository CarDealershipRepos
 
         if (await ExistsByNameAsync(dto.Name))
         {
-            throw new AppValidationException().Add(nameof(CarDealershipDto.Name),"O nome do fabricante já está em uso." );
+            throw new AppValidationException().Add(nameof(CarDealershipDto.Name),"O nome da concessionária já está em uso.");
         }
 
         var created = await _CarDealershipRepository.CreateAsync(entity);

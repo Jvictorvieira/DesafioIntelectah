@@ -45,10 +45,9 @@ public class ClientController(IClientService ClientService, IMapper mapper) : Ba
             await _ClientService.CreateAsync(dto);
             return Json(new { success = true, message = "Cadastro realizado com sucesso!", url = Url.Action("GetTableData", "Client") });
         }
-        catch (InvalidOperationException ex)
+        catch (AppValidationException ex)
         {
-            foreach (var msg in ex.Message.Split(';'))
-                ModelState.AddModelError(string.Empty, msg.Trim());
+            HandleException(ex);
             return PartialView("_Form", model);
         }
     }
@@ -114,7 +113,7 @@ public class ClientController(IClientService ClientService, IMapper mapper) : Ba
         try
         {
             await _ClientService.DeleteAsync(id);
-            return Json(new { success = true, message = "Cadastro excluído com sucesso!", url = Url.Action("GetTableData", "Client") });
+            return Json(new { success = true, message = "Cliente excluído com sucesso!", url = Url.Action("GetTableData", "Client") });
         }
         catch (AppValidationException ex)
         {
